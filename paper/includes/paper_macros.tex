@@ -1,0 +1,18 @@
+% Shared manuscript macros for the paper.
+% Stable, cross-section macros — keep wording mechanically enforced via these.
+% Add macros incrementally as new vocabulary stabilizes during drafting; never redefine locally.
+
+%--- evidential-grade markers ------------------------------------------------
+% design/04_CONTROLS_AND_CLAIMS.md §3; paper/claims.md.
+% Rendered identically every time a grade is stated; never paraphrased as
+% plain prose, and never blended within a sentence (hard rule 2).
+\newcommand{\grade}[1]{\textnormal{\textsc{#1}}}
+\newcommand{\gTheorem}{\grade{theorem-anchored}}
+\newcommand{\gExact}{\grade{exact-finite}}
+\newcommand{\gMeasured}{\grade{measured}}
+\newcommand{\gRegPos}{\grade{registered-positive}}
+\newcommand{\gRegNeg}{\grade{registered-negative}}
+\newcommand{\gInterp}{\grade{interpretation}}
+
+%--- notation -----------------------------------------------------------------
+\newcommand{\Xires}{\Xi(D \mid L)}

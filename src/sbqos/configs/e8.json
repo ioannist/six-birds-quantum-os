@@ -1,0 +1,15 @@
+{
+  "experiment": "e8",
+  "seed": 0,
+  "distance": 3,
+  "rounds": 5,
+  "p0": "1/200",
+  "p1_multiplier": 2,
+  "n_grid": [10, 20, 50, 100, 250, 500, 1000, 2000],
+  "n_seeds": 10,
+  "detect_seeds_required": 9,
+  "bootstrap_B": 200,
+  "null_runs": 50,
+  "N_cal": 200000,
+  "baseline_calibration_shots": 200000
+}

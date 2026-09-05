@@ -1,0 +1,26 @@
+\section{Results II: negative results as a taxonomy}
+\label{sec:negatives}
+
+Fourteen of the original build's 25 registered predictions failed as frozen. % F-147, F-148 (C-22)
+Appendix~\ref{app:predictions} lists every one with its verdict and artifact; the frozen bars are in the public design documents and the measured values in each artifact's results file; none required changing any frozen parameter to diagnose. Here we do two things: classify the failures, and work one example of each class in enough detail that the reader can judge whether the diagnostic readings are honest. The classification (\gInterp): % C-23
+
+\begin{enumerate}
+\item \textbf{Bounds written at the wrong scale.} The prediction constrained the right quantity, but its bar was set at the scale of a different one.
+\item \textbf{Thresholds frozen too strictly.} The predicted effect exists and points the right way, but the frozen numeric bar was set beyond what the effect delivers.
+\item \textbf{Structure the prediction mischaracterized.} The measurement is informative and the machinery correct, but the world disagreed with the registered hypothesis.
+\end{enumerate}
+
+\paragraph{Worked example, class 1 (P1.1).} We registered that the full-schedule residual trace would fall below $10^{-2}$ at $p = 1/20$ and shrink $10\times$ from distance 3 to 5. Measured: $0.0837$ and $0.0740$, a ratio of $1.13$. % F-061, F-106
+The bound was written at logical-error-probability scale, but $\operatorname{tr}\Xi$ is the linear-estimator MMSE of a $\pm1$ observable---a different quantity with a different scale and different distance behavior. The failure is real and taught us something concrete: the residual's units are variance of an observable, not failure probability, and predictions must be written in the object's own units. The linear-class limitation the number reflects is independently visible error-by-error: an exact bounded-weight cross-check shows that the affine estimator $A^{*}$ built from REP(5)'s four syndrome bits reproduces majority-logic minimum-weight decoding on 14 of 16 low-weight errors and fails on two (\gExact). That the failure is a limitation of the whole linear class, not of this one estimator, is our reading (\gInterp). % F-043
+
+\paragraph{Worked example, class 2 (P6.2).} We registered that a slack point exists strictly before budget exhaustion, at tolerance $\lambda_{\mathrm{tol}} = 10^{-9}$. Measured: $b^{*} = b_{\max}$ for both REP(5) and SURF(3), because even the smallest genuine marginal value in these families exceeds the frozen tolerance. % F-072, F-058
+The value curve itself is exact and its tail marginals are tiny (of order $10^{-5}$ to $10^{-4}$), % F-057
+so the intended phenomenon---most of the budget buys almost nothing---is visibly present in the curve; the certificate failed because its threshold was frozen four to five orders of magnitude below the phenomenon. % F-057, F-058
+A defensible re-thresholding would pass, and we did not do it, because a moved threshold after seeing data is exactly what the discipline forbids.
+
+\paragraph{Worked example, class 3 (P5.3).} The protocol-trap prediction of Section~\ref{sec:results-memory}: we registered that our alternating schedule was an artifact that internalization would dissolve. Internalization preserved all 4 witnesses; the schedule carries genuine predictive content. % F-070
+The machinery did precisely its job---it is the registered hypothesis that was wrong, and the failure sharpened the concept: ``externally scheduled'' does not imply ``predictively empty.'' For this package and its declared observation catalog, internalizing the schedule left every witness intact: the phase carried information about future observables, so the trap did not classify it as an artifact.
+
+One more failure deserves mention here because the entire second half of the paper grows out of it: P2.1, the deployable drift witness that never detected within the tested grid (class 3, with an implementation-defect component). Its diagnosis and repair are Section~\ref{sec:arc}.
+
+% ===========================================================================

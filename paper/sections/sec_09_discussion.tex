@@ -1,0 +1,22 @@
+\section{Discussion: what this does and does not establish}
+\label{sec:discussion}
+
+\paragraph{Established, on this prototype's evidence (our synthesis of the claim inventory; \gInterp).} Four SBT primitives, forced into a real technical domain, each produced a concrete, machine-checkable audit object whose behavior on ground truth matched its intended semantics: a coverage residual that lands exactly on the enumerated optimal MMSE where theory says it must; an existence certificate whose typed statuses do genuine classification work, including refusing a trivialized decoder; an exact memory witness with a quantified, rational worst-case gap and a currentization step that names the hidden coordinate; and a protocol-trap control that operated correctly against our own hypothesis. % C-01
+The falsification discipline was real: 14 of 25 original predictions failed as frozen and none was tuned away. % F-148, C-02
+And the discipline was \emph{productive}: the framework's exact-input machinery diagnosed one of its own registered failures, predicted in advance both where the corrected instrument would win and where it would keep losing, was right on both, and carried the correction to circuit level (clearing its bar at the thinnest margin the grid resolves) and to a closed control loop on a known drifting channel, with the unresolved frequent-schedule comparison stated. % C-03
+
+\paragraph{Not established.} No hardware evidence of any kind; everything is classical simulation of small codes. % C-05
+No claim that $\Xi \succ 0$ precludes a nonlinear decoder. % C-04
+No claim that the corrected witness beats failure-rate monitoring in general---the advantage is scenario-dependent, and the original E2 scenario is our own registered counterexample. % C-31
+No claim that witness-triggering beats \emph{frequent} blind recalibration (unresolved at this sample size); the resolved comparison is budget-matched. % C-35
+No positive evidence for the pricing primitive, whose registered predictions all failed; % C-21b
+and no evidence at all regarding transport/functoriality, which was never built. % C-01
+No Born-rule, Bell, or coherent-dynamics claims, and no asymptotic-threshold claims: every result is finite-carrier classical simulation. % C-05
+No fitted macro model is used as evidence; fitted quantities are diagnostic only. % C-05
+No cross-audit inference: stability does not establish nontrivial storage, coverage and existence do not imply one another, and memory witnesses and drift do not imply one another. % design/04 §1
+No drift-identification claim from E9: its recalibration acts on the one channel known by construction to drift, so it evidences the timing and budget value of the witness only. % C-39
+Nothing here validates SBT's broader ambitions in other domains: one domain, honestly instrumented, is one data point.
+
+\paragraph{What the exercise suggests about frameworks for emergence.} The pattern this prototype exhibits---primitives that compile to computable certificates, nulls that can fire against the theory's own favorite conclusions, predictions frozen before the scored runs, and a repair loop that runs \emph{inside} the framework---is, we think, the appropriate evidentiary standard for any theory of emergence that wants to be more than vocabulary. Quantitative accounts of emergence outside SBT likewise tie a macro-level description to a computable criterion: coarse-grained predictability~\cite{israeli2006coarse}, effective information~\cite{hoel2013causal}, dynamical independence~\cite{barnett2023dynamical}. That they share the falsifiability demand as well is our reading (\gInterp), not a claim those works make. Judged by that standard, four of SBT's six primitives produced positively evidenced objects here, one (pricing) returned a clean registered negative---which is the discipline working, not failing---and one abstained. Whether the framework's primitives continue to earn their keep is now an empirical question with a template: pick a domain with a packaging structure, instantiate, register, run, and report the failures at the same volume as the wins.
+
+% ===========================================================================

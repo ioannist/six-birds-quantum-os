@@ -1,0 +1,60 @@
+\section{The complete prediction ledger}
+\label{app:predictions}
+
+Every registered prediction, its verdict against its frozen bar, and its artifact. Original build (E1--E6): 25 predictions, 14 \gRegNeg. % F-147, F-148
+Follow-up (E7--E9): 9 scored predictions plus 5 declared-descriptive reports. % F-147
+Artifact paths abbreviate \texttt{artifacts/eN\_*/\dots/results.json} as \texttt{eN}.
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{l p{9.2cm} l l}
+\toprule
+id & short statement & verdict & artifact \\
+\midrule
+P1.1 & REP full-check residual bound and distance suppression & \gRegNeg & e1 \\ % F-001
+P1.2 & single-check ablations strictly increase residual; REP(5) end/middle distinction & \gRegPos & e1 \\ % F-002
+P1.3 & witness overlap threshold and directional naming & \gRegNeg & e1 \\ % F-003
+P1.4 & duplicated-check saturation gives zero discharge & \gRegPos & e1 \\ % F-004
+P2.1 & witnesses detect earlier than matched baseline & \gRegNeg & e2 \\ % F-005
+P2.2 & witness direction names the injected logical direction & \gRegNeg & e2 \\ % F-006
+P2.3 & null false-positive rate at $N{=}4000$ at most 2\% & \gRegPos & e2 \\ % F-007
+P2.4 & N5 drift-witness trace Spearman $\rho \ge 0.9$ & \gRegNeg & e2 \\ % F-008
+P3.1 & greedy residual no worse than tested baselines at every budget & \gRegPos & e3 \\ % F-009
+P3.2 & degree ladder monotone; top rung equals exact MMSE & \gRegPos & e3 \\ % F-010
+P3.3 & duplicate candidates have zero marginal value & \gRegPos & e3 \\ % F-011
+P3.4 & greedy stops before exhausting duplicate-containing list & \gRegPos & e3 \\ % F-012
+P4.1 & baseline $CD$ near zero, multiplicity 2, certified, $\delta$ monotone & \gRegNeg & e4 \\ % F-013
+P4.2 & N4 non-closed while per-mode models have zero deficit & \gRegNeg & e4 \\ % F-014
+P4.3 & N5 finite-horizon $RM \ge 10\times$ baseline & \gRegNeg & e4 \\ % F-015
+P4.4 & broken-decoder trivialization guard & \gRegPos & e4 \\ % F-016
+P4.5 & Pearson $r(CD, \Delta_{\mathrm{pred}}) \ge 0.9$ & \gRegPos & e4 \\ % F-017
+P5.1 & memoryless package: no witnesses, no payoff gap & \gRegPos & e5 \\ % F-018
+P5.2 & N4 witness and MaxFiber nontrivial with positive bounded payoff & \gRegNeg & e5 \\ % F-019
+P5.3 & protocol-trap witnesses vanish after internalization & \gRegNeg & e5 \\ % F-020
+P5.4 & mode-bit currentization passes at cardinality 1; pure checks do not & \gRegPos & e5 \\ % F-021
+P6.1 & $\lambda$ nonincreasing after its maximum & \gRegNeg & e6 \\ % F-022
+P6.2 & slack point before the examined budget maximum & \gRegNeg & e6 \\ % F-023
+P6.3 & consequence test separates $b^{*}{-}1$ from $b^{*}$ by $> 2$ SE & \gRegNeg & e6 \\ % F-024
+P6.4 & proxy costs strictly worse at $\ge 80\%$ of budget points & \gRegNeg & e6 \\ % F-025
+\midrule
+P7.1 & recalibrated own-null threshold $\le 10\%$ of borrowed threshold & \gRegNeg & e7 \\ % F-079
+P7.2 & off-support $(4,8)$: best corrected rung $\ge 10\times$ earlier than baseline & \gRegPos & e7 \\ % F-080
+P7.3 & original $(0,3)$: \emph{predicted} that no corrected rung beats the baseline's $N_{\mathrm{det}}$ & \gRegPos & e7 \\ % F-081
+P7.4 & near-parity $(2,5)$: descriptive, no bar & \gMeasured & e7 \\ % F-082
+P7.5 & off-support naming: $\ge 8/10$ seeds name a true-pair qubit, overlap $\ge 0.6$ & \gRegNeg & e7 \\ % F-083
+P7.6 & null false-positive rate $\le 2\%$ for every rung & \gRegNeg & e7 \\ % F-084
+P7.7 & sequential vs.\ fixed-window reported symmetrically; no bar & \gMeasured & e7 \\ % F-085
+P8.1 & circuit-level witness detects $\ge 2\times$ earlier than baseline & \gRegPos & e8 \\ % F-086
+P8.2 & circuit-level null false-positive rate $\le 2\%$ & \gRegPos & e8 \\ % F-087
+P8.cost & cost/scaling report; descriptive, no bar & \gMeasured & e8 \\ % F-140
+P9.1 & witness-triggered control within 0.01 of oracle & \gRegPos & e9 \\ % F-091
+P9.2 & witness beats per-seed budget-matched blind schedule & \gRegPos & e9 \\ % F-092
+P9.3 & high-budget schedule: descriptive, no bar & \gMeasured & e9 \\ % F-094
+P9.4 & pre-drift trigger rates: descriptive, no bar & \gMeasured & e9 \\ % F-096
+\bottomrule
+\end{tabular}
+\caption{The complete prediction ledger. Verdicts are against bars frozen before implementation (E1--E7) or frozen from a disjoint-seed pilot before the scored run (E8--E9).}
+\label{tab:ledger}
+\end{table}
+
+% ===========================================================================

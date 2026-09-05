@@ -1,0 +1,60 @@
+\section{Instantiation on quantum error correction}
+\label{sec:instantiation}
+
+\subsection{The domain objects}
+\label{sec:domain}
+
+The prototype uses two code families in four instances---REP(3), REP(5), and SURF(3) as the primary instances, SURF(5) only for scaling spot-checks---and five noise models, all declared and frozen before implementation. % F-163
+The codes: the classical repetition code REP($d$) for $d \in \{3,5\}$ (bit-flip protection; checks $Z_iZ_{i+1}$), and the rotated surface code SURF($d$)~\cite{kitaev2003anyons,bravyi1998boundary,dennis2002topological} for $d \in \{3,5\}$ ($d=3$: 9 data qubits, 8 checks; $d=5$ used only in scaling spot-checks). % F-163
+The noise models, all stochastic Pauli at code capacity except where stated: N1 (iid bit-flip $p$), N2 (iid depolarizing $p$), N3 (N2 plus an \emph{unmodeled} correlated $ZZ$ injection on one declared qubit pair with probability $q$---the drift model: the declared model believes N2), N4 (hidden two-state Markov mode switching the depolarizing rate between $p_0$ and $3p_0$; the mode is not observable), and N5 (a latching proxy for leakage: one designated qubit irreversibly becomes fully depolarizing at rate $r$ per round). N4 is a telegraph-type rate fluctuation of the kind two-level-system defects produce in superconducting qubits~\cite{klimov2018fluctuations}, and temporally correlated noise of this kind is known to degrade surface-code memories~\cite{kam2025nonmarkovian}; N5 is a deliberately crude proxy, since real leakage in stabilizer circuits is more structured~\cite{ghosh2013leakage,mcewen2021removing}. Sections~\ref{sec:e8}--\ref{sec:e9} additionally use circuit-level noise: Stim-generated rotated-surface-code memory circuits~\cite{gidney2021stim} with per-location depolarizing and measurement-flip probabilities, decoded by minimum-weight perfect matching~\cite{dennis2002topological,edmonds1965blossom} via PyMatching~\cite{higgott2022pymatching,higgott2025sparseblossom}. Code conventions follow the standard rotated-layout literature~\cite{fowler2012surfacecodes,tomita2014lowdistance}.
+
+The computational substrate for everything exact is a \emph{moment engine} over $\pm1$ observables. A Pauli error and a check/logical observable are both vectors in $\mathbb{F}_2^{2n}$~\cite{gottesman1997stabilizer}; the detection bit is the symplectic pairing $\langle a, e\rangle$, and the observable is $\sigma_a(e) = (-1)^{\langle a,e\rangle}$. For independent Pauli noise with rational parameters, every mean $\mathbb{E}[\sigma_a]$ is a closed-form product of per-qubit rational factors, and $\sigma_a \sigma_b = \sigma_{a \oplus b}$, so every covariance block in Eq.~\eqref{eq:xi} is exactly computable with no sampling. This one identity is also what later makes the diagnosis of Section~\ref{sec:diagnosis} possible: means of XOR-combinations of checks \emph{are} the Walsh--Hadamard coefficients of the full syndrome distribution~\cite{odonnell2014analysis}, so the entire $2^{8}$-outcome syndrome pmf of SURF(3) is exactly recoverable from the moment engine. % F-163
+The same Boolean-Fourier fact underlies the identifiability results for learning Pauli channels from syndrome statistics~\cite{wagner2022paulichannels}.
+
+\subsection{The instantiation map}
+\label{sec:map}
+
+Table~\ref{tab:map} (rendered graphically in Figure~\ref{fig:map}) is the paper's frame: each SBT primitive, the QEC object it becomes, where it is tested, and---stated in the table itself, not in a footnote---the evidential outcome. Four primitives are positively evidenced, one is evidentially negative, one was deferred. % C-01
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{3.4cm}}
+\toprule
+SBT primitive & QEC instantiation & Experiments & Evidential outcome \\
+\midrule
+Packaging operator $E = U_f \circ Q_f \circ P^\tau$ & the QEC cycle: noise $\to$ syndrome $\to$ recovery & all & substrate for every audit \\
+Existence certificate ($\delta, \varepsilon, CD_\tau, RM$, multiplicity) & typed logical-qubit objecthood status & E4 (+E1) & positive (\S\ref{sec:results-existence}) \\
+Adequacy residual $\Xires$, witness, chain rule & syndrome-coverage audit over native + degree-2 checks & E1, E2, E3, E7--E9 & positive (\S\ref{sec:results-coverage}, \S\ref{sec:arc}) \\
+Predictive quotient / memory witness ($Q, M, \Delta^{\max}$) & decoder-memory certificate, minimal decoder machine & E5 & positive (\S\ref{sec:results-memory}) \\
+Protocol trap / internalization & schedule-artifact vs.\ genuine-memory control & E5c & control ran; artifact hypothesis falsified (\S\ref{sec:results-memory}) \\
+Shadow price / slack ($V, \lambda, b^{*}$) & check-budget economics & E6 & machinery exact; all registered predictions negative (\S\ref{sec:results-pricing}) \\
+Transport / functoriality & certified deformation bridges & --- & deferred; never implemented \\
+\bottomrule
+\end{tabular}
+\caption{The instantiation map. The outcome column states the honest split up front: four primitives positively evidenced, pricing evidentially negative, transport deferred.} % C-01
+\label{tab:map}
+\end{table}
+
+\subsection{Scope fences}
+\label{sec:fences}
+
+The following restrictions were frozen in the design documents before implementation and bind every claim in this paper. % C-04, C-05
+
+\begin{enumerate}
+\item \emph{No quantum hardware.} All evidence is classical simulation of stochastic Pauli / classical Markov models, plus Stim circuit-level sampling.
+\item \emph{The residual is class-relative.} The prototype's $\Xi$ is the residual covariance of the best affine predictor of the logical $\pm1$ observables from the scheduled-check $\pm1$ observables (optionally augmented with degree-2 products). $\Xi = 0$ certifies exact coverage by the linear estimator class over the declared feature family; $\Xi \succ 0$ certifies a coverage gap for that class and prices it. It does \emph{not} assert that no nonlinear decoder covers the gap. The degree ladder shows the residual contracting as feature degree grows, which is the framework's own account of what nonlinear decoding buys.
+\item \emph{No Born-rule, Bell, or coherent-dynamics claims.} Stochastic Pauli noise is a standard, declared restriction that leaves out coherent errors~\cite{bravyi2018coherent} and quantum-bath non-Markovian dynamics~\cite{terhal2005nonmarkovian}; the temporal correlations this prototype does model (N4, N5) are classical hidden-state correlations layered on stochastic Pauli noise. SBT's own quantum-theory paper works at exactly this packaging level~\cite{sbt-qm}.
+\item \emph{No asymptotic threshold claims.} Every result is finite-carrier.
+\item \emph{No fitted proxies as evidence.} Fitted macro models are diagnostic only; seeded sampled outcomes may carry the \gMeasured{} grade; theorem-grade quantities are computed exactly on declared finite models.
+\item \emph{The audits are independent.} Stability does not establish nontrivial storage (a trivialized decoder is perfectly stable; multiplicity is a separate check), coverage and existence do not imply one another, and memory witnesses and drift do not imply one another; each audit is certified or falsified on its own and their outcomes are never summed.
+\end{enumerate}
+
+\begin{figure}[tbp]
+\centering
+\input{figures/fig_F1_map}
+\caption{The SBT-to-QEC instantiation map. The packaging operator is the shared substrate of every audit and is not itself scored. Solid arrows: the four primitives that produced positively evidenced audit objects. Dashed arrow: the pricing primitive, whose machinery was implemented exactly. Every one of its registered predictions failed. Greyed row: transport, scoped out before the build began and never implemented.}% C-01, C-21a, C-21b
+\label{fig:map}
+\end{figure}
+\clearpage
+
+% ===========================================================================

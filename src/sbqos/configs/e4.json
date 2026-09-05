@@ -1,0 +1,35 @@
+{
+  "cd_max": 0.1,
+  "delta_max": 0.1,
+  "eps_stable": "1/20",
+  "experiment": "e4",
+  "models": [
+    "rep3_n1",
+    "surf3_n2",
+    "n4",
+    "n5",
+    "broken"
+  ],
+  "n5_declared_horizon": 100,
+  "n5_horizons": [
+    20,
+    50,
+    100,
+    200,
+    500,
+    1000
+  ],
+  "p_sweep": [
+    "1/100",
+    "1/20",
+    "1/10",
+    "1/5"
+  ],
+  "seed": 0,
+  "stream_length": 100000,
+  "taus": [
+    1,
+    2,
+    4
+  ]
+}

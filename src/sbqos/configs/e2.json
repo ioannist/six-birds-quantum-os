@@ -1,0 +1,28 @@
+{
+  "baseline_model_shots": 1000000,
+  "bootstrap_B": 200,
+  "detect_seeds_required": 9,
+  "experiment": "e2",
+  "inject_pair": [
+    0,
+    3
+  ],
+  "inject_q": "1/50",
+  "n5_leak_qubit": 0,
+  "n5_r": "1/100",
+  "n5_window_shots": 2000,
+  "n5_windows": 10,
+  "n_grid": [
+    250,
+    500,
+    1000,
+    2000,
+    4000,
+    8000,
+    16000
+  ],
+  "n_seeds": 10,
+  "null_runs": 50,
+  "seed": 0,
+  "surf3_p": "3/100"
+}

@@ -1,0 +1,17 @@
+\section{Deviations log (summary)}
+\label{app:deviations}
+
+The repository's deviations file records every divergence between frozen design and running code; 8 entries total, summarized here in 2--3 sentences each. Dates and full reasoning are in the file itself. % C-38
+
+\begin{enumerate}
+\item \emph{Finite-horizon route mismatch for N5} (E4). The latching model is absorbing, so the stationary-weight form of $RM$ degenerates; a declared finite-horizon variant was used and the guard documented. % F-099
+\item \emph{Predictive-gap stream length} (E4). The stream proxy's fixed length can wash out fast-absorbing finite-horizon effects; noted as a caveat on $\Delta_{\mathrm{pred}}$, not silently retuned. % F-100
+\item \emph{Packaged belief automaton} (E5). For the history catalogs declared for E5, no finite catalog was transport-closed on the mixing hidden-mode kernel (a verified limitation of those catalogs, not a general impossibility theorem); the minimal decoder machine is built on an exact packaged-belief construction instead, with the change declared. % F-101
+\item \emph{Bounded-weight cross-check estimator} (E1; post-close audit). The cross-check originally used an uncentered estimator instead of the affine $A^{*}$ form the decoder actually is; corrected before any follow-up work began, giving REP(3) 4/4 and REP(5) 14/16 with two genuine linear-class failures. This entry was added to the ledger after an external review found the fix documented in prose but missing here. % F-101b
+\item \emph{Payoff v2} (E5). A post-registration \gMeasured{} NLL study, separately labeled; alters no frozen verdict. A 2026-09-05 addendum records that its run-length machines read one syndrome bit and the logical increment (not syndrome history alone) and are scored on the second half of each trajectory, unlike the other predictors. % F-102
+\item \emph{E7 null-calibration granularity}. The witness rungs' (W2a, W2b) own-null thresholds were calibrated once per sample size $N$ rather than once per $(N, \mathrm{seed})$ cell; declared; the baseline's calibration was unaffected. % F-103
+\item \emph{E8 scope simplification and pilot-then-freeze}. Distance 3 only, one global drift scenario, full pair family, no sequential rung; pilot seed range and resulting frozen bars logged verbatim. % F-104
+\item \emph{E9 corrections, pilot-phase and post-first-freeze}. The drift scenario was changed after verifying that a uniform rescale gives matching nothing to recalibrate; the timeline was epoch-discretized; the witness policy needed two pilot-driven fixes (a design that could permanently blind itself on a false alarm, then a noisy-reference bug in the self-correcting version); and, after the first frozen run, the budget-matched schedule was corrected to exact per-seed event matching and the experiment re-run and re-frozen. All logged. % F-105
+\end{enumerate}
+
+% ===========================================================================

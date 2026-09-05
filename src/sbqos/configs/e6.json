@@ -1,0 +1,9 @@
+{
+  "consequence_shots": 1000000,
+  "experiment": "e6",
+  "lambda_tol": 1e-9,
+  "n_proxy_seeds": 10,
+  "rep5_p": "1/20",
+  "seed": 0,
+  "surf3_p": "3/100"
+}

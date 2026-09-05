@@ -1,0 +1,26 @@
+\section{Reproducibility statement}
+\label{sec:repro}
+
+Everything reported above regenerates from the public repository. The known-good environment (exact versions all reported numbers were measured against): Python 3.10.12, numpy 2.2.6, scipy 1.15.3, stim 1.16.0, pymatching 2.4.0, matplotlib 3.10.8, pytest 9.0.2. % F-169
+The dependency floors in \texttt{pyproject.toml} are lower bounds, not pins; to reproduce the exact environment, install those versions explicitly. % F-160, F-161
+Setup and verification:
+
+\begin{verbatim}
+pip install -e ".[dev]"              # package + pytest
+pytest -q                            # 170 tests pass
+python -m sbqos.reproduce_all        # nine experiments; manifests verified
+python -m sbqos.reproduce_all        # second run; compare byte-for-byte
+python paper/figures/make_figures.py # figures F3-F9 (deterministic)
+\end{verbatim}
+
+The prototype's suite passes 149 tests (127 from the original build, 22 from the follow-up), and 21 further tests cover the paper's figure pipeline; % F-145, F-168
+the theorem-anchoring tests are % F-162
+\begin{itemize}[nosep]
+\item \texttt{test\_thm\_chain\_rule\_rep5\_seeded\_splits\_exact},
+\item \texttt{test\_thm\_top\_ladder\_rep3\_mmse\_matches\_bruteforce\_exact},
+\item \texttt{test\_thm\_B5\_lumpable\_zero\_deficit\_for\_syndrome\_lens}.
+\end{itemize}
+Each \texttt{reproduce\_all} run regenerates the nine experiments and verifies its own freshly written manifest; the evidence recorded for this paper is stronger than that: two consecutive runs produced byte-identical files, and their nine manifest root hashes equal the ones recorded in the repository report (wall clock $\approx$ 13--14 minutes per run on the reference machine). % F-159, F-149..F-157
+each experiment directory contains its frozen configuration, results, SHA-256 manifest, environment record, and every figure's exact data as CSV. The nine manifest root hashes are recorded in the repository report so a reader can verify they regenerated the same evidence, not merely similar evidence. % F-149..F-157
+
+% ===========================================================================

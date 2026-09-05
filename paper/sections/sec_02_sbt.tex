@@ -1,0 +1,80 @@
+\section{Six Birds Theory for readers who have never seen it}
+\label{sec:sbt}
+
+This section is self-contained. It introduces exactly the SBT machinery the prototype uses, in the finite, classical-probability setting where the prototype lives; the corpus develops the same objects in greater generality~\cite{sbt-f1,sbt-f3}. Readers fluent in QEC may find it useful to keep the intended dictionary in mind throughout: the ``carrier'' will be the error state of a code, the ``lens'' will be syndrome extraction and decoding, and the ``package'' will be the logical qubit.
+
+\subsection{The core picture: packaging}
+\label{sec:sbt-packaging}
+
+SBT starts from a deliberately spare setup. There is a \emph{carrier}: a set $Z$ of microscopic states, with some dynamics---here, a Markov kernel $P$ describing one time step. There is a \emph{lens}: a map $f$ from carrier states to a much smaller set of macroscopic labels. And there is a \emph{prototype} assignment: for each macroscopic label $x$, a canonical carrier distribution $u_x$ that the system treats as ``the representative state of $x$.''
+
+The central object built from these is the \emph{packaging operator}
+\begin{equation}
+E_{\tau,f}(\mu) \;=\; U_f\!\bigl(Q_f(\mu P^{\tau})\bigr),
+\label{eq:packaging}
+\end{equation}
+read right to left: evolve the carrier distribution $\mu$ for $\tau$ steps, push it through the lens ($Q_f$, marginalization onto macro labels), then lift each macro label back to its prototype ($U_f$)~\cite{sbt-f1}. In words: \emph{let the world run, look at it coarsely, and snap what you saw back to a canonical form}. Something deserves to be called an emergent object, on SBT's account, when this round trip is nearly idempotent---when packaging twice is almost the same as packaging once---and when the macro layer it stabilizes is nontrivial (more than one distinguishable state survives).
+
+The reader may already see the QEC cycle in Eq.~\eqref{eq:packaging}: noise acts ($P^\tau$), a syndrome is extracted and decoded ($Q_f$), and recovery restores a canonical coset representative ($U_f$). That is not an analogy we impose; it is the instantiation the framework forces once the carrier and lens are chosen (Section~\ref{sec:instantiation}). The point of the framework is what it tells you to \emph{compute} about this loop. Each of the six primitives below is an audit: a quantity, computable from the declared model, whose value certifies something specific about the package---or exhibits a specific way it fails.
+
+\subsection{Primitive 1: the existence certificate}
+\label{sec:sbt-existence}
+
+The first audit asks the bluntest question: \emph{is there a stable macro object here at all?} SBT answers with a small set of numbers~\cite{sbt-f1,sbt-f3,sbt-xor}:
+
+\begin{itemize}
+\item The \emph{idempotence defect} $\delta$: how far $E^2$ is from $E$, in total variation, maximized over initial point masses. Small $\delta$ means packaging is self-consistent.
+\item The \emph{retention error} $\varepsilon$: the probability that $\tau$ steps of dynamics carry a prototype out of its own macro cell, maximized over macro labels (a worst case). A theorem of the framework (T-IC-02 in~\cite{sbt-f1}) guarantees $\delta \le \varepsilon$; a computed violation would falsify the implementation or the theory.
+\item The \emph{closure deficit} $CD_\tau = I(X_t;\, Y_{t+\tau} \mid Y_t)$, with $Y = f(X)$ and the mutual information taken under the chain's stationary law (a declared finite-horizon weighting replaces it for absorbing models; Appendix~\ref{app:deviations}): how much the hidden micro state now tells you about the macro label $\tau$ steps ahead beyond what the current macro label already tells you. $CD_\tau = 0$ says that, on the law's support and at that horizon, the current macro label is sufficient for predicting the later one---the lumpability condition of classical Markov-chain theory~\cite{kemeny1960finite,buchholz1994lumpability} at horizon $\tau$, expressed as an information-theoretic closure measure of the kind also used outside SBT~\cite{pfante2014closure}; SBT's version is~\cite{sbt-f3,sbt-ng,sbt-cast}.
+\item The \emph{route mismatch} $RM_\tau$: whether the micro states inside one macro cell agree on where they send the macro label next---the stationary-weighted $\ell_1$ spread of each micro state's coarse transition profile around its cell's average, summed over cells~\cite{sbt-xor}. It vanishes exactly when the lens is dynamically lumpable at horizon $\tau$.
+\item A \emph{multiplicity} count: how many macro labels have stable prototypes. This guards against the degenerate ``certificate'' earned by collapsing everything to a single state---a decoder that maps every error to ``fine'' has perfect idempotence and no object.
+\end{itemize}
+
+These are assembled into a typed status---\texttt{certified}, \texttt{degrading}, \texttt{non\_closed}, or \texttt{trivialized}---by frozen thresholds. The taxonomy matters more than any single number: it separates ``the object exists'' from ``the object is dissolving,'' from ``the macro layer leaks information from a hidden coordinate,'' from ``you defined the object away.''
+
+\subsection{Primitive 2: the adequacy residual}
+\label{sec:sbt-xi}
+
+The second audit asks: \emph{do the observables you actually schedule cover the thing you care about?} Fix a family $L$ of \emph{native probes} (things you measure routinely) and a family $D$ of \emph{dissolving probes} (things whose value defines the object but which you cannot measure directly without destroying it). The \emph{adequacy residual} is the Schur complement
+\begin{equation}
+\Xires \;=\; K_{DD} - K_{DL}\,K_{LL}^{+}\,K_{LD},
+\label{eq:xi}
+\end{equation}
+where the $K$ blocks are covariances among the probe observables and ${}^{+}$ is the pseudoinverse~\cite{sbt-xi}. $\Xires$ is exactly the residual covariance of the best \emph{affine} estimator of $D$ from $L$ (linear in the centered observables, with an intercept); it coincides with a conditional covariance in the Gaussian case (Gaussianity being sufficient, not necessary, for the two to agree), so we say \emph{residual} throughout. It is the part of the object's behavior that your scheduled measurements cannot see, priced in variance. Three consequences give the primitive its teeth:
+
+\begin{itemize}
+\item \emph{The blind-spot witness.} If $\Xires$ exceeds a declared budget $\Omega$, i.e.\ $\lambda_{\max}(\Xi - \Omega) > 0$, the top eigenvector $z$ of $\Xi - \Omega$ \emph{names a direction}: the specific combination of dissolving observables most invisible to the current schedule~\cite{sbt-xi}.
+\item \emph{The chain rule.} Adding a candidate probe family $M$ discharges the residual by an exactly computable amount: $\Xi(D \mid L \cup M) = \Xires - \mathrm{discharge}(M \mid L, D)$. Marginal coverage value is therefore an exact, decomposable currency, which supports greedy probe selection with per-step guarantees~\cite{sbt-xi}.
+\item \emph{Saturation.} A duplicated probe has exactly zero discharge---a built-in null: any implementation in which redundancy appears to buy coverage is wrong~\cite{sbt-xi}.
+\end{itemize}
+
+One fence, stated once here and repeated where it matters: $\Xi = 0$ certifies coverage \emph{by the linear estimator class over the declared probe family}, and $\Xi \succ 0$ certifies a gap \emph{for that class}. It does not assert that no nonlinear decoder exists. The framework's own account of nonlinearity is the \emph{degree ladder}: enlarging the probe family with product features (degree-2, degree-3, \dots) and watching the residual contract through the same chain rule~\cite{sbt-xi,sbt-cast}.
+
+\subsection{Primitive 3: predictive quotients and the memory witness}
+\label{sec:sbt-quotients}
+
+The third audit asks: \emph{does acting well require remembering more than you can currently see?} (An external conceptual counterpart is the memory term of projection-operator reductions, which appears when a coarse-grained description fails to close~\cite{chorin2000mori}.) Take a declared finite catalog of \emph{histories} (probability distributions over carrier states, encoding ``what might be true now given what was observed''). Two histories are \emph{currently equivalent} if every currently measurable event has the same probability under both; they are \emph{predictively equivalent} if every declared future observation, under every declared continuation of the dynamics, has the same probability. Partitioning the catalog both ways gives the \emph{current quotient} $Q$ and the \emph{predictive quotient} $M$~\cite{sbt-hol}. Predictive equivalence of histories is the construction behind causal states and $\varepsilon$-machines in computational mechanics~\cite{crutchfield1989statistical,shalizi2001computational} and behind predictive state representations~\cite{littman2001predictive}; SBT's version restricts it to a declared finite catalog so that it can be computed exactly.
+
+A \emph{memory witness} is a pair of histories that are currently equivalent but predictively distinct: the present looks identical, the futures differ. The witness count, the largest number of predictive classes hiding inside one current class (\emph{MaxFiber}), and the worst-case predictive gap $\Delta^{\max}$ (an exact rational number: the largest difference, over witness pairs and declared future events, in the probability of that event---the largest error some declared prediction must carry if the two histories are treated as one) together certify \emph{that} the declared futures differ and \emph{by how much}. Whether that difference is worth anything to a decoder is a separate, measured question (Section~\ref{sec:results-memory}). Two constructive companions complete the audit: \emph{currentization} searches a declared candidate list for the smallest set of added observables that dissolves all witnesses (exposing what the hidden state is), and the \emph{minimal machine} is the automaton on predictive classes---the smallest state machine that reproduces every declared future prediction (built here on an exact packaged-belief construction; Appendix~\ref{app:deviations})~\cite{sbt-hol,sbt-hid}.
+
+\subsection{Primitive 4: the protocol trap}
+\label{sec:sbt-trap}
+
+The fourth audit is a control on the third. Apparent memory can be an artifact of an external schedule: if an experimenter alternates conditions, ``memory of the phase'' can masquerade as memory intrinsic to the system. The protocol trap prescribes \emph{internalization}: rebuild the model with the schedule as an explicit, autonomously evolving state coordinate, and recompute the witnesses. If they vanish, the memory was a scheduling artifact (\texttt{artifact\_trap}); if they survive, it is genuine~\cite{sbt-pt,sbt-f1}. This is a falsification instrument aimed at the framework's own favorite conclusion---which is precisely why we implemented it (and, as Section~\ref{sec:results-memory} reports, it falsified \emph{our} expectation, in the honest direction).
+
+\subsection{Primitive 5: prices and slack}
+\label{sec:sbt-prices}
+
+The fifth audit treats coverage as an economy. With probes carrying costs and a budget $b$, define the value function $V(b)$ (the most residual that budget $b$ can discharge) and the \emph{shadow price} $\lambda(b) = V(b{+}1) - V(b)$~\cite{sbt-spend}. The audit's claims: $\lambda$ prices the marginal check; a \emph{slack point} $b^{*}$ (the smallest budget beyond which $\lambda$ stays below a declared tolerance at every larger budget) certifies over-provisioning; removing resources down to $b^{*}$ can change the residual by at most the tolerance times the budget removed, and a separately measured consequence test asks whether the decoder's sampled error rate moves at all; and optimizing against a \emph{proxy} cost vector (costs shuffled among candidates) should be visibly worse---a null that detects when the ``economics'' is decorative. In this prototype the pricing machinery is exact and runs correctly, and every one of its registered predictions failed at the frozen tolerances; Section~\ref{sec:results-pricing} reports this as a negative in full.
+
+\subsection{Primitive 6: transport (not tested here)}
+\label{sec:sbt-transport}
+
+The sixth primitive, transport/functoriality---certified bridges showing that a package deforms coherently across related carriers, with composable defect bounds~\cite{sbt-nk}---was explicitly deferred before this build began and was never implemented. It appears in this paper only in the instantiation map (Figure~\ref{fig:map}), greyed out, so that the reader is never under the impression that all six primitives were positively demonstrated.
+
+\subsection{The methodological spine}
+\label{sec:sbt-method}
+
+Two further SBT commitments shaped everything below, and they are methodological rather than mathematical. First, \emph{exact-finite evidence}: theorem-grade quantities are computed on declared finite models in exact rational arithmetic, so that a certificate is a computation, not an estimate~\cite{sbt-f3}. Second, the \emph{no-go/null-battery discipline}: every positive mechanism ships with the controls that would expose it as fake---saturation nulls, trivialization guards, proxy failures, protocol traps~\cite{sbt-ng}. The prototype implements the exact-finite commitment on its declared exact paths (the moment engine's exact branch, the residual and chain-rule construction, the predictive-quotient engine; Section~\ref{sec:methods-exact} states precisely what is and is not exact) and the null-battery commitment in full; Section~\ref{sec:methods} describes the resulting evidence rules.
+
+% ===========================================================================

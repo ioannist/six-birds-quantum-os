@@ -1,0 +1,55 @@
+\section{Notation}
+\label{app:notation}
+
+Paper symbols and their meanings, grouped by primitive. The repository uses code-level names documented alongside each symbol in the project's notation file; the paper uses only the symbols below.
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{l p{10.5cm}}
+\toprule
+Symbol & Meaning \\
+\midrule
+\multicolumn{2}{l}{\emph{Packaging (Section~\ref{sec:sbt})}} \\
+$Z, P, f$ & carrier state set, one-step Markov kernel, lens (macro label map) \\
+$\mu$ & a carrier distribution (the argument of the packaging operator) \\
+$u_x$ & prototype distribution of macro label $x$ \\
+$Q_f, U_f$ & marginalization through the lens; lift of a macro label to its prototype \\
+$E_{\tau,f} = U_f \circ Q_f \circ P^{\tau}$ & packaging operator at horizon $\tau$ \\
+$\pi$ & stationary law of $P$ (replaced by a declared finite-horizon weighting for absorbing models) \\
+$\sigma_a$ & $\pm1$ observable of Pauli vector $a$: $\sigma_a(e) = (-1)^{\langle a, e\rangle}$ \\
+$L, D$ & native (scheduled) and dissolving (logical) probe families \\
+\multicolumn{2}{l}{\emph{Coverage audit}} \\
+$K_{LL}, K_{DL}, K_{DD}$ & covariance blocks of scheduled-check / logical $\pm1$ observables \\
+$\Xires$ & adequacy residual: logical covariance invisible to the linear span of $L$ \\
+$A^{*}$ & coverage-optimal linear map, $A^{*} = K_{DL}K_{LL}^{+}$ \\
+$\lambda_{\max}(\Xi - \Omega),\; z$ & blind-spot witness eigenvalue / direction; $\Omega$ = calibrated null allowance \\
+$L^{(2)}$ & degree-$\le2$ family: native checks plus all pairwise XOR products \\
+$\hat\theta, \theta_{\mathrm{model}}, \Sigma_\theta$ & empirical / exact mean vector of $L^{(2)}$ and its estimator covariance \\
+$T$ & corrected quadratic drift statistic, Eq.~\eqref{eq:w2b} \\
+$N_{\mathrm{det}}$ & smallest sample size with detection in $\ge 9/10$ seeds \\
+\midrule
+\multicolumn{2}{l}{\emph{Existence audit}} \\
+$\delta, \varepsilon$ & idempotence defect; retention error (theorem: $\delta \le \varepsilon$) \\
+$CD_\tau$ & closure deficit, $I(X_t; Y_{t+\tau} \mid Y_t)$ \\
+$RM_\tau$ & route mismatch (evolve-then-package vs.\ package-then-evolve) \\
+$\Delta_{\mathrm{pred}}$ & out-of-sample predictive gap (stream proxy for $CD$) \\
+mult.\ & multiplicity: number of stable logical prototypes (the symbol $\mu$ is reserved for carrier distributions) \\
+\midrule
+\multicolumn{2}{l}{\emph{Memory audit}} \\
+$Q, M$ & current / predictive quotients (partitions of the declared history catalog); $|Q|, |M|$ their class counts \\
+MaxFiber & largest number of predictive classes inside one current class \\
+$\Delta^{\max}$ & exact worst-case predictive gap (rational) \\
+\midrule
+\multicolumn{2}{l}{\emph{Pricing audit}} \\
+$V(b), \lambda(b), b^{*}$ & value curve over budget; shadow price $V(b{+}1)-V(b)$; slack point \\
+\midrule
+\multicolumn{2}{l}{\emph{Circuit level / closed loop}} \\
+$p_0, p_1$ & declared / drifted error probability \\
+$d, R$ & code distance, circuit rounds \\
+\bottomrule
+\end{tabular}
+\caption{Notation.}
+\label{tab:notation}
+\end{table}
+
+% ===========================================================================

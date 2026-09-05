@@ -1,0 +1,68 @@
+{
+  "artifact": {
+    "bytes": 711126,
+    "filename": "Tsiokos_2026_Auditing_Emergence_in_Quantum_Error_Correction_A_Falsifiable_Instantiation_of_Six_Birds_Theory.pdf",
+    "pages": 37,
+    "path": "paper/submission/artifacts/Tsiokos_2026_Auditing_Emergence_in_Quantum_Error_Correction_A_Falsifiable_Instantiation_of_Six_Birds_Theory.pdf",
+    "sha256": "f7f64e275fc96b5d3205926614c3f14261f3c0239668213469ad9dff41889366",
+    "source_git_commit": "2c1ca74faf1571e9b8cf6d9cfbc5f5a81985f3a6",
+    "validated_values": {
+      "copyright": "© 2026",
+      "license": "CC-BY 4.0",
+      "paper version": "Preprint v1.0",
+      "publication date": "5 September 2026",
+      "reserved DOI": "10.5281/zenodo.22337886"
+    }
+  },
+  "assembled_at_utc": "2026-09-05T09:42:10.490044+00:00",
+  "dashboard_url": "https://zenodo.org/deposit/22337886",
+  "deposition_id": 22337886,
+  "doi_reservation": {
+    "client": "datacite",
+    "identifier": "10.5281/zenodo.22337886",
+    "provider": "datacite",
+    "verified_via": "rdm_pid_table"
+  },
+  "draft_source": "created",
+  "manual_dashboard_publication_only": true,
+  "metadata": {
+    "citation_count": 79,
+    "path": "paper/submission/zenodo-metadata.json",
+    "sha256": "ffeb2732d37a6808665948e2e053a276c2910e77cc4d628d2ef3399cba5838f5",
+    "skipped_citations": [
+      {
+        "bib_key": "krause2008sensor",
+        "reason": "no supported identifier field"
+      },
+      {
+        "bib_key": "littman2001predictive",
+        "reason": "no supported identifier field"
+      },
+      {
+        "bib_key": "popper1959logic",
+        "reason": "no supported identifier field"
+      },
+      {
+        "bib_key": "kemeny1960finite",
+        "reason": "no supported identifier field"
+      }
+    ]
+  },
+  "paper_release_include": "paper/includes/release_metadata.tex",
+  "publication_date": "2026-09-05",
+  "remote_file": {
+    "bytes": 711126,
+    "filename": "Tsiokos_2026_Auditing_Emergence_in_Quantum_Error_Correction_A_Falsifiable_Instantiation_of_Six_Birds_Theory.pdf",
+    "md5": "4fc2ebb65700db5f749bb49e6ec86279",
+    "sha256": "f7f64e275fc96b5d3205926614c3f14261f3c0239668213469ad9dff41889366",
+    "verified": true
+  },
+  "remote_metadata": {
+    "desired_sha256": "ffeb2732d37a6808665948e2e053a276c2910e77cc4d628d2ef3399cba5838f5",
+    "modified": "2026-09-05T09:42:31.060972+00:00",
+    "sha256": "40e6cbc1c45ac066160d7bb0f8274d69e029343f7c89851796688a05e22567f8"
+  },
+  "reserved_doi": "10.5281/zenodo.22337886",
+  "schema_version": 1,
+  "stage": "file_uploaded"
+}

@@ -1,0 +1,68 @@
+\begin{tikzpicture}[
+  x=1in, y=1in, font=\small,
+  stage/.style={rounded corners=3pt, line width=0.6pt,
+    align=center, inner sep=4pt, outer sep=0pt, minimum height=1.70in},
+  substage/.style={rounded corners=3pt, line width=0.6pt,
+    draw=black!50, fill=black!4, font=\footnotesize,
+    align=center, inner sep=3pt, outer sep=0pt, text width=1.52in},
+  flow/.style={-{Stealth[length=5pt,width=5pt]}, line width=0.8pt}
+]
+% A 6.5in by 4.6in canvas includes the legend and balanced outer margins.
+\path[use as bounding box] (0,0) rectangle (\linewidth,4.60in);
+
+% Top row: equal-height boxes and two 0.45in horizontal connectors.
+\node[stage, draw=red!60!black, fill=red!8,
+  text width=\dimexpr1.80in-8pt\relax] (s1) at (1.00,3.65)
+  {E2: registered prediction P2.1 fails as frozen};
+\node[stage, draw=blue!60!black, fill=blue!8,
+  text width=\dimexpr1.85in-8pt\relax] (s2) at (3.275,3.65)
+  {Exact-input diagnosis with the framework's own machinery: Walsh--Hadamard pmf inversion, $A^{*}$-lift energy compression, mis-scaled null};
+\node[stage, draw=blue!60!black, fill=blue!8,
+  text width=\dimexpr1.75in-8pt\relax] (s3) at (5.525,3.65)
+  {Corrected statistic re-registered, including a prediction that the original scenario will \textsc{still} not beat the baseline};
+
+% Bottom-left stage: one container with a heading and two internal boxes.
+\node[stage, draw=black!50, fill=black!4, minimum width=1.80in]
+  (s5) at (1.00,1.25) {};
+\node[font=\small\bfseries, inner sep=0pt] at (1.00,1.92)
+  {Generalization};
+\node[substage, minimum height=0.68in] (e8) at (1.00,1.45)
+  {E8: circuit level (Stim, $d{=}3$); $2\times$ bar met at the grid's thinnest margin};
+\node[substage, minimum height=0.53in] (e9) at (1.00,0.775)
+  {E9: closed recalibration loop on a known drifting channel};
+
+% Bottom-right stage: one rounded outline, equal halves, one divider.
+\begin{scope}
+  \clip[rounded corners=3pt] (2.35,0.40) rectangle (6.40,2.10);
+  \fill[green!10] (2.35,0.40) rectangle (4.375,2.10);
+  \fill[orange!12] (4.375,0.40) rectangle (6.40,2.10);
+\end{scope}
+\draw[green!50!black, line width=0.6pt, rounded corners=3pt]
+  (4.375,0.40) -- (2.35,0.40) -- (2.35,2.10) -- (4.375,2.10);
+\draw[orange!70!black, line width=0.6pt, rounded corners=3pt]
+  (4.375,2.10) -- (6.40,2.10) -- (6.40,0.40) -- (4.375,0.40);
+\draw[black!50, line width=0.6pt] (4.375,0.40) -- (4.375,2.10);
+\node[align=center, inner sep=4pt,
+  text width=\dimexpr2.025in-8pt\relax] at (3.3625,1.25)
+  {E7 off-support $(4,8)$: W2b at full detection by $N{=}1000$; neither baseline meets the criterion within the grid};
+\node[align=center, inner sep=4pt,
+  text width=\dimexpr2.025in-8pt\relax] at (5.3875,1.25)
+  {E7 original $(0,3)$: predicted failure to beat the baseline held (baseline 1000 vs.\ corrected 4000)};
+\coordinate (s4north) at (5.525,2.10);
+\coordinate (s4west) at (2.35,1.25);
+
+% The only arrows are the five straight edges of the clockwise loop.
+\draw[flow] (s1.east) -- (s2.west);
+\draw[flow] (s2.east) -- (s3.west);
+\draw[flow] (s3.south) -- (s4north);
+\draw[flow] (s4west) -- (s5.east);
+\draw[flow, line width=1.4pt] (s5.north) -- (s1.south);
+
+\node[font=\small, align=center, text width=3.10in, inner sep=0pt]
+  (thesis) at (3.25,2.45)
+  {\textbf{the framework audits and repairs\\its own instrument}};
+
+\node[font=\footnotesize, align=center, text width=6.30in, inner sep=0pt]
+  at (3.25,0.175)
+  {red = registered failure; blue = framework-internal diagnosis and re-registration; green = registered positive; amber = predicted negative that held};
+\end{tikzpicture}

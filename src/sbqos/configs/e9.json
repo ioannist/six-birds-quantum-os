@@ -1,0 +1,18 @@
+{
+  "experiment": "e9",
+  "seed": 0,
+  "distance": 3,
+  "rounds": 9,
+  "p0": "3/1000",
+  "measure_multiplier": 20,
+  "E_total": 40,
+  "drift_epoch": 15,
+  "shots_per_epoch": 300,
+  "n_seeds": 10,
+  "N_cal": 100000,
+  "bootstrap_B": 200,
+  "candidate_multipliers": [1, 2, 3, 5, 7, 10, 13, 16, 20, 25, 30],
+  "N_curve": 20000,
+  "schedule_K_matched": 40,
+  "schedule_K_frequent": 5
+}

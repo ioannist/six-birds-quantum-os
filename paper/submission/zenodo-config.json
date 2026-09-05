@@ -1,0 +1,51 @@
+{
+  "citation_policy": {
+    "allowed_entries_without_identifiers": [
+      "krause2008sensor",
+      "littman2001predictive",
+      "popper1959logic",
+      "kemeny1960finite"
+    ]
+  },
+  "paper": {
+    "title": "Auditing Emergence in Quantum Error Correction: A Falsifiable Instantiation of Six Birds Theory"
+  },
+  "profile": "ioannis-tsiokos",
+  "release_policy": {
+    "expected_remote": "https://github.com/ioannist/six-birds-quantum-os"
+  },
+  "schema_version": 1,
+  "zenodo": {
+    "metadata": {
+      "custom": {
+        "code:codeRepository": "https://github.com/ioannist/six-birds-quantum-os",
+        "code:programmingLanguage": [
+          {
+            "id": "python",
+            "title": {
+              "en": "Python"
+            }
+          },
+          {
+            "id": "tex",
+            "title": {
+              "en": "TeX"
+            }
+          }
+        ]
+      },
+      "keywords": [
+        "quantum error correction",
+        "emergence",
+        "emergence calculus",
+        "Six Birds Theory",
+        "adequacy residual",
+        "existence certificate",
+        "pre-registered predictions",
+        "drift detection",
+        "decoder recalibration",
+        "reproducible simulation"
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+six-birds-papers
+
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+
+artifacts/**
+!artifacts/
+!artifacts/**/
+!artifacts/manifest.json
+!artifacts/**/manifest.json
+
+# local agent tooling and scratch (never published)
+.codex/
+paper/citation-candidates/

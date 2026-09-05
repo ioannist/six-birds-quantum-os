@@ -1,0 +1,38 @@
+{
+  "baseline_model_shots": 1000000,
+  "bootstrap_B": 200,
+  "cusum_B": 200,
+  "cusum_run_length": 4000,
+  "cusum_target_false_alarm": 0.02,
+  "detect_seeds_required": 9,
+  "experiment": "e7",
+  "inject_pairs": [
+    [
+      0,
+      3
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      4,
+      8
+    ]
+  ],
+  "inject_q": "1/50",
+  "n_grid": [
+    250,
+    500,
+    1000,
+    2000,
+    4000,
+    8000,
+    16000
+  ],
+  "n_seeds": 10,
+  "naming_step": "1/10000",
+  "null_runs": 50,
+  "seed": 0,
+  "surf3_p": "3/100"
+}

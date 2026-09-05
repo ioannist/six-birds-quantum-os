@@ -1,0 +1,46 @@
+\begin{tikzpicture}[
+  box/.style={draw=black, line width=0.6pt, rounded corners=3pt, text width=2.4in, minimum width=2.6in, minimum height=0.68in, align=center, inner sep=4pt, font=\small},
+  negative/.style={box, fill=black!5},
+  deferred/.style={box, draw=black!45, text=black!45},
+  audit arrow/.style={-{Stealth[length=5pt,width=5pt]}, line width=0.6pt},
+  arrow label/.style={font=\footnotesize, align=center, text width=1.08in, inner sep=1pt}
+]
+\path[use as bounding box] (0,0.18in) rectangle (\linewidth,-7.56in);
+
+\node[font=\small\bfseries\scshape, align=center] at (1.3in,0) {Six Birds Theory primitive};
+\node[font=\small\bfseries\scshape, align=center] at ($(\linewidth,0)+(-1.3in,0)$) {QEC audit object};
+
+\node[draw=black!35, line width=0.6pt, rounded corners=3pt, fill=black!5,
+      text width=6.18in, minimum width=6.38in, minimum height=0.54in,
+      align=center, inner sep=4pt, font=\small] (substrate) at ($(0.5\linewidth,0)+ (0,-0.50in)$)
+{Packaging operator $E = U_f \circ Q_f \circ P^{\tau}$ \;=\; the QEC cycle (noise $\to$ syndrome $\to$ recovery): the shared substrate of every audit; not itself scored};
+
+\node[box] (l1) at (1.3in,-1.55in) {Existence / closure certificate ($\delta,\varepsilon,CD_\tau,RM$, multiplicity)};
+\node[box] (r1) at ($(\linewidth,0)+(-1.3in,-1.55in)$) {Logical-qubit objecthood status: certified / degrading / non-closed / trivialized};
+\draw[audit arrow] (l1.east) -- node[arrow label, above=2pt] {$\delta \le \varepsilon$ holds (theorem); status set by thresholds on $\delta$, $CD_\tau$, multiplicity} (r1.west);
+
+\node[box] (l2) at (1.3in,-2.55in) {Adequacy residual $\Xi(D \mid L)$, witness, chain rule};
+\node[box] (r2) at ($(\linewidth,0)+(-1.3in,-2.55in)$) {Syndrome-coverage audit (native + degree-2 checks)};
+\draw[audit arrow] (l2.east) -- node[arrow label, above=2pt] {$\Xi = K_{DD} - K_{DL}K_{LL}^{+}K_{LD}$} (r2.west);
+
+\node[box] (l3) at (1.3in,-3.55in) {Predictive quotient / memory witness ($Q, M, \Delta^{\max}$)};
+\node[box] (r3) at ($(\linewidth,0)+(-1.3in,-3.55in)$) {Decoder-memory certificate; minimal decoder machine};
+\draw[audit arrow] (l3.east) -- node[arrow label, above=2pt] {witness = same current class, different predictive class} (r3.west);
+
+\node[box] (l4) at (1.3in,-4.55in) {Protocol trap / schedule internalization};
+\node[box] (r4) at ($(\linewidth,0)+(-1.3in,-4.55in)$) {Schedule-artifact vs.\ genuine-memory control};
+\draw[audit arrow] (l4.east) -- node[arrow label, above=2pt] {internalize the schedule, recompute witnesses (here all 4 survived)} (r4.west);
+
+\node[negative] (l5) at (1.3in,-5.55in) {Shadow price / slack point ($V,\lambda,b^{*}$)};
+\node[negative] (r5) at ($(\linewidth,0)+(-1.3in,-5.55in)$) {Check-budget economics};
+\draw[audit arrow, dashed, draw=black!60] (l5.east) -- node[arrow label, above=2pt, text=black!60] {$\lambda(b) = V(b{+}1) - V(b)$; evidence: negative} (r5.west);
+
+\node[deferred] (l6) at (1.3in,-6.55in) {Transport / functoriality};
+\node[deferred] (r6) at ($(\linewidth,0)+(-1.3in,-6.55in)$) {(not instantiated)};
+\node[font=\footnotesize\itshape, text=black!45, anchor=east, align=right]
+  at ($(r6.east)+(0,-0.43in)$) {deferred, not implemented};
+
+\node[font=\footnotesize, align=center, text width=6.35in, anchor=south]
+  at ($(0.5\linewidth,0)+(0,-7.50in)$)
+  {solid arrow = positively evidenced audit object (4); dashed = machinery exact, every registered prediction failed (1); grey = deferred (1); top band = shared substrate, not scored};
+\end{tikzpicture}

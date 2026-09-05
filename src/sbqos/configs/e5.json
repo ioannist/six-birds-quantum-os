@@ -1,0 +1,39 @@
+{
+  "alpha": "1/2",
+  "belief_bfs_cap": 10000,
+  "belief_bfs_depth": 6,
+  "experiment": "e5",
+  "n4_p0": "1/50",
+  "n4_s": "1/50",
+  "n5_p": "1/20",
+  "n5_r": "1/100",
+  "payoff_rounds": 100000,
+  "payoff_v2_points": [
+    {
+      "label": "frozen_defaults",
+      "p0": "1/50",
+      "s": "1/50"
+    },
+    {
+      "label": "loud_mode",
+      "p0": "1/10",
+      "s": "1/100"
+    }
+  ],
+  "payoff_v2_rounding_Ks": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "payoff_v2_rounds": 300000,
+  "payoff_v2_run_length_Ks": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "seed": 0,
+  "trap_p0": "1/50",
+  "trap_p1": "3/50"
+}

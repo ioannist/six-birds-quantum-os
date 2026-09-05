@@ -1,0 +1,29 @@
+\section{Formula summary}
+\label{app:formulas}
+
+The instantiated objects, with their SBT sources. All formulas below are as implemented; the design documents in the repository are the normative statement.
+
+\paragraph{Observables and moments~\cite{sbt-xi,sbt-f3}.} For $a, e \in \mathbb{F}_2^{2n}$ with symplectic pairing $\langle a, e\rangle$: $\sigma_a(e) = (-1)^{\langle a,e\rangle}$, with $\sigma_a \sigma_b = \sigma_{a \oplus b}$. For independent Pauli noise, $\mathbb{E}[\sigma_a] = \prod_i m_i(a)$ with per-qubit rational factors $m_i$; all covariance blocks follow in closed form. Means of XOR-combinations of a check family are the Walsh--Hadamard coefficients of its joint syndrome pmf, which is therefore exactly recoverable by inversion.
+
+\paragraph{Adequacy residual and chain rule~\cite{sbt-xi}.}
+$\Xires = K_{DD} - K_{DL}K_{LL}^{+}K_{LD}$; \quad $A^{*} = K_{DL}K_{LL}^{+}$;
+\begin{gather*}
+\mathrm{discharge}(M \mid L, D) = K_{DM|L}\,(K_{MM|L})^{+}\,K_{DM|L}^{\top}, \\
+\Xi(D \mid L \cup M) = \Xires - \mathrm{discharge}(M \mid L, D),
+\end{gather*}
+with the conditional blocks $K_{\cdot\cdot|L}$ the usual Schur complements. Blind-spot witness: top eigenpair of $\Xi - \Omega$. Saturation: $\mathrm{discharge} = 0$ exactly for a duplicated probe.
+
+\paragraph{Existence certificate~\cite{sbt-f1,sbt-f3,sbt-xor,sbt-ng,sbt-cast}.}
+$E_{\tau,f} = U_f \circ Q_f \circ P^\tau$;\quad
+$\delta = \max_z \tfrac12 \|(E^2 - E)(\delta_z)\|_1$;\quad
+$\varepsilon = \max_x \|Q_f(u_x P^{\tau}) - \delta_x\|_{TV}$;\quad theorem $\delta \le \varepsilon$.
+$CD_\tau = I(X_t; Y_{t+\tau} \mid Y_t) = \sum_x \pi(x)\, D_{\mathrm{KL}}(p_x^{(\tau)} \,\|\, \bar p_{\Pi(x)}^{(\tau)})$ under the stationary law $\pi$, with $Y = \Pi(X)$ and $\bar p_y^{(\tau)}$ the $\pi(\cdot \mid y)$-weighted fiber average; a declared finite-horizon weighting replaces $\pi$ for absorbing models (Appendix~\ref{app:deviations}).
+$RM_\tau = \sum_x \sum_{z \in B_x} \pi(z)\, \|R_\tau(z,\cdot) - K_\tau(x,\cdot)\|_1$, with $R_\tau(z,\cdot)$ the coarse transition profile of micro state $z$, $B_x$ the fiber of macro label $x$, and $K_\tau(x,\cdot) = \sum_{z \in B_x} \pi(z \mid x) R_\tau(z,\cdot)$ its fiber average (global stationary weight outside, fiber-renormalized weight inside; the same finite-horizon replacement applies to absorbing models). Status $\in$ \{\texttt{certified}, \texttt{degrading}, \texttt{non\_closed}, \texttt{trivialized}\} by frozen thresholds with first-match priority \texttt{trivialized} $\succ$ \texttt{non\_closed} $\succ$ \texttt{degrading} $\succ$ \texttt{certified}.
+
+\paragraph{Predictive quotients~\cite{sbt-hol}.} Histories partitioned by exact equality of current signatures (probabilities of all declared current events) and of future signatures (probabilities of all declared (continuation, later-event) pairs) give $Q$ and $M$; witnesses are pairs equal in the former, distinct in the latter; $\Delta^{\max}$ is the largest entrywise future-observation difference over witness pairs (exact rational). Currentization: smallest declared candidate set whose addition gives witness count 0 and MaxFiber 1. Protocol trap~\cite{sbt-pt}: internalize the schedule as an autonomous state coordinate (random-scan lift) and recompute.
+
+\paragraph{Pricing~\cite{sbt-spend}.} $V(b) = \max_{S:\, \mathrm{cost}(S) \le b} [\operatorname{tr}\Xi(D|L_0) - \operatorname{tr}\Xi(D \mid L_0 \cup S)]$ (exact by enumeration on REP(3)/REP(5) scales); $\lambda(b) = V(b{+}1) - V(b)$; slack point $b^{*}$ = smallest $b$ with $\lambda \le \lambda_{\mathrm{tol}}$ thereafter; proxy null = seeded cost permutation.
+
+\paragraph{Corrected drift witness (Section~\ref{sec:e7}).} $T = (\hat\theta - \theta_{\mathrm{model}})^{\top} \Sigma_\theta^{+} (\hat\theta - \theta_{\mathrm{model}})$ over the degree-$\le2$ family, with $\hat\theta$ the empirical mean of the feature vector $F$ over $N$ shots and $\Sigma_\theta = \operatorname{Cov}(F)/N$ under the declared model; naming by whitened matched filter against nine exact per-qubit drift signatures; sequential wrapper $g_t = \max(0,\, g_{t-1} + \mathrm{increment}_t)$ with null-simulated threshold~\cite{page1954continuous}, applied identically to witness and baseline.
+
+% ===========================================================================

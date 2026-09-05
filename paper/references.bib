@@ -1,0 +1,943 @@
+% paper/references.bib
+% Two tiers, in this order: (1) SBT corpus (Zenodo-deposited preprints by the same author),
+% (2) external QEC/statistics literature.
+% SBT entries use the exact tag legend from design/01_MATH_SPEC.md (top of file) so every [TAG] citation
+% in the design docs and paper/claims.md resolves to exactly one bibkey below. External entries were
+% verified via web search on 2026-07-06 (title/venue/arXiv id cross-checked against arxiv.org/journal
+% pages); the one NOTE-VERIFY placeholder (dgr2023reweighting) was resolved 2026-09-04. A final pass before submission should
+% re-confirm page numbers and any version updates.
+
+%% ============================== TIER 1: SBT CORPUS ==============================
+%% See paper/refs_map.md for the design-doc tag -> bibkey table.
+%% All twelve are Zenodo-deposited preprints by Ioannis Tsiokos, cited by their Zenodo DOIs (each verified
+%% against the Zenodo record on 2026-09-05; sbt-hol was deposited that day). Until 2026-09-05 all twelve were
+%% wrongly typed as unpublished manuscripts.
+
+@misc{sbt-f1,
+  author = {Tsiokos, Ioannis},
+  title  = {{Six Birds}: Foundations of Emergence Calculus},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.18365949},
+  year   = {2026},
+  month  = jan,
+  doi    = {10.5281/zenodo.18365949},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [F1] in the SBQOS design docs.}
+}
+
+@misc{sbt-f3,
+  author = {Tsiokos, Ioannis},
+  title  = {{Six Birds} Foundations {III}: A Finite Audited Interaction Calculus for {SBT}},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.20124595},
+  year   = {2026},
+  month  = may,
+  doi    = {10.5281/zenodo.20124595},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). DOI found by Zenodo title search (the corpus tex header carries none). Tag [F3].}
+}
+
+@misc{sbt-xi,
+  author = {Tsiokos, Ioannis},
+  title  = {Adequacy Residuals and Blind-Spot Currency},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.20713713},
+  year   = {2026},
+  month  = jun,
+  doi    = {10.5281/zenodo.20713713},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [XI]. Source of the adequacy-residual / blind-spot-witness construction instantiated as the adequacy residual, A*, and W1/W2/W2' in this project.}
+}
+
+@misc{sbt-nk,
+  author = {Tsiokos, Ioannis},
+  title  = {Emergence {IS} the Needle Killer},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.20713688},
+  year   = {2026},
+  month  = jun,
+  doi    = {10.5281/zenodo.20713688},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [NK].}
+}
+
+@misc{sbt-hol,
+  author = {Tsiokos, Ioannis},
+  title  = {Holonomy with Memory in {Six Birds} Theory: Predictive Quotients, Witnesses, and Fixed-Support Route Transport},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.22335923},
+  year   = {2026},
+  month  = sep,
+  doi    = {10.5281/zenodo.22335923},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, publication date 2026-09-05; manuscript dated April 2026). Dated April 2026. Tag [HOL]. Source of the predictive-quotient / memory-witness / minimal-machine construction instantiated in E5.},}
+}
+
+@misc{sbt-pt,
+  author = {Tsiokos, Ioannis},
+  title  = {{Six Birds} Protocol Trap: Holonomy Without Entropy Production},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.18906902},
+  year   = {2026},
+  month  = mar,
+  doi    = {10.5281/zenodo.18906902},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [PT]. Source of the protocol-trap / schedule-internalization control used in E5c.}
+}
+
+@misc{sbt-ng,
+  author = {Tsiokos, Ioannis},
+  title  = {{Six Birds}: No-Go Theorems for Audited Emergence},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.19187777},
+  year   = {2026},
+  month  = mar,
+  doi    = {10.5281/zenodo.19187777},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [NG]. Source of the null-battery / illegitimate- proxy discipline.}
+}
+
+@misc{sbt-cast,
+  author = {Tsiokos, Ioannis},
+  title  = {To Cast a Stone with {Six Birds}: A Closure-Deficit Account of Randomness under Packaging and Budget},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.18926433},
+  year   = {2026},
+  month  = mar,
+  doi    = {10.5281/zenodo.18926433},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [CAST].}
+}
+
+@misc{sbt-xor,
+  author = {Tsiokos, Ioannis},
+  title  = {To {XOR} a Stone with {Six Birds}: Closure Diagnostics for Emergent Bits, Gates, and Booleanity},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.19002791},
+  year   = {2026},
+  month  = mar,
+  doi    = {10.5281/zenodo.19002791},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Two version DOIs exist under concept 10.5281/zenodo.18919369 (18919370 in the corpus tex, 19002791 in the source repo README); the later version is cited. Tag [XOR].}
+}
+
+@misc{sbt-spend,
+  author = {Tsiokos, Ioannis},
+  title  = {To Spend a Stone with {Six Birds}: Currency--Constraint Duality and Shadow Prices Across Closure Layers},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.18926771},
+  year   = {2026},
+  month  = mar,
+  doi    = {10.5281/zenodo.18926771},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [SPEND]. Source of the shadow-price / slack-point construction instantiated in E6.}
+}
+
+@misc{sbt-qm,
+  author = {Tsiokos, Ioannis},
+  title  = {A {Six-Birds}' Eye View of Quantum Theory: Defining Objects by What We Can Distinguish, Not What We Imagine},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.18608833},
+  year   = {2026},
+  month  = feb,
+  doi    = {10.5281/zenodo.18608833},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Zenodo deposit is v1 under this title; the manuscript consulted (v2, 16 Feb 2026) is retitled "A Six-Birds' Eye View of Quantum Theory: Operational Closure Semantics for Measurement, Contextuality, and Record Stability". Cite the deposited title until v2 is deposited. Tag [QM]. States SBT's own scope limits when applied to quantum theory, which this project's nonclaims section (REPORT.md \S5) relies on.}
+}
+
+@misc{sbt-hid,
+  author = {Tsiokos, Ioannis},
+  title  = {Hiddenness as a Structural Law of Emergence},
+  howpublished = {Zenodo preprint, doi:10.5281/zenodo.20713577},
+  year   = {2026},
+  month  = jun,
+  doi    = {10.5281/zenodo.20713577},
+  annote = {Verified against the Zenodo record on 2026-09-05 (author, title, date). Tag [HID].}
+}
+
+%% ============================== TIER 2: EXTERNAL LITERATURE ==============================
+%% Verified 2026-07-06 via web search against arxiv.org / journal pages.
+
+@article{gidney2021stim,
+  author  = {Gidney, Craig},
+  title   = {{Stim}: a fast stabilizer circuit simulator},
+  journal = {Quantum},
+  volume  = {5},
+  pages   = {497},
+  year    = {2021},
+  doi     = {10.22331/q-2021-07-06-497},
+  eprint  = {2103.02202},
+  archivePrefix = {arXiv},
+  annote = {Used throughout \S7 for circuit-level (E8/E9) sampling.},
+}
+
+@article{higgott2022pymatching,
+  author  = {Higgott, Oscar},
+  title   = {{PyMatching}: A {Python} package for decoding quantum codes with minimum-weight perfect
+             matching},
+  journal = {ACM Transactions on Quantum Computing},
+  volume  = {3},
+  number  = {3},
+  pages   = {16:1--16:16},
+  doi     = {10.1145/3505637},
+  year    = {2022},
+  eprint  = {2105.13082},
+  archivePrefix = {arXiv},
+  annote = {Original PyMatching release.},
+}
+
+@article{higgott2025sparseblossom,
+  author  = {Higgott, Oscar and Gidney, Craig},
+  title   = {Sparse Blossom: correcting a million errors per core second with minimum-weight matching},
+  journal = {Quantum},
+  volume  = {9},
+  pages   = {1600},
+  year    = {2025},
+  doi     = {10.22331/q-2025-01-20-1600},
+  eprint  = {2303.15933},
+  archivePrefix = {arXiv},
+  annote = {The sparse-blossom algorithm underlying the PyMatching 2 decoder used as the baseline throughout this project.},
+}
+
+@article{fowler2012surfacecodes,
+  author  = {Fowler, Austin G. and Mariantoni, Matteo and Martinis, John M. and Cleland, Andrew N.},
+  title   = {Surface codes: Towards practical large-scale quantum computation},
+  journal = {Physical Review A},
+  volume  = {86},
+  pages   = {032324},
+  year    = {2012},
+  doi     = {10.1103/PhysRevA.86.032324},
+  eprint  = {1208.0928},
+  archivePrefix = {arXiv},
+  annote = {Canonical surface-code reference; source of the rotated-surface-code layout convention this project's code-capacity experiments (E1-E7) follow.},
+}
+
+@article{google2023suppressing,
+  author  = {{Google Quantum AI}},
+  title   = {Suppressing quantum errors by scaling a surface code logical qubit},
+  journal = {Nature},
+  volume  = {614},
+  pages   = {676--681},
+  year    = {2023},
+  doi     = {10.1038/s41586-022-05434-1},
+  eprint  = {2207.06431},
+  archivePrefix = {arXiv},
+  annote = {Established the pairwise detector-correlation (``$p_{ij}$'') noise-calibration method (edge weight $w_{ij} = \log((1-p_{ij})/p_{ij})$) that this project's \S7 correction (E7's degree-$\le$2 statistic, E9's recalibration) is closest to in the existing literature; cited in \S1/\S8 to state plainly that detector-statistic calibration itself is prior art.},
+}
+
+@article{mcewen2021removing,
+  author  = {McEwen, M. and Kafri, D. and Chen, Z. and Atalaya, J. and Satzinger, K. J. and Quintana, C. and Klimov, P. V. and Sank, D. and Gidney, C. and Fowler, A. G. and Arute, F. and Arya, K. and Buckley, B. and Burkett, B. and Bushnell, N. and Chiaro, B. and Collins, R. and Demura, S. and Dunsworth, A. and Erickson, C. and Foxen, B. and Giustina, M. and Huang, T. and Hong, S. and Jeffrey, E. and Kim, S. and Kechedzhi, K. and Kostritsa, F. and Laptev, P. and Megrant, A. and Mi, X. and Mutus, J. and Naaman, O. and Neeley, M. and Neill, C. and Niu, M. and Paler, A. and Redd, N. and Roushan, P. and White, T. C. and Yao, J. and Yeh, P. and Zalcman, A. and Chen, Yu and Smelyanskiy, V. N. and Martinis, John M. and Neven, H. and Kelly, J. and Korotkov, A. N. and Petukhov, A. G. and Barends, R.},
+  title   = {Removing leakage-induced correlated errors in superconducting quantum error correction},
+  journal = {Nature Communications},
+  volume  = {12},
+  pages   = {1761},
+  year    = {2021},
+  doi     = {10.1038/s41467-021-21982-y},
+  annote = {Prior art for correlated-error / leakage detection via detector statistics, relevant background for E7/E8's drift-detection framing.},
+}
+
+@misc{dgr2023reweighting,
+  author  = {Wang, Hanrui and Liu, Pengyu and Liu, Yilian and Gu, Jiaqi and Baker, Jonathan and
+             Chong, Frederic T. and Han, Song},
+  title   = {{DGR}: Tackling Drifted and Correlated Noise in Quantum Error Correction via Decoding
+             Graph Re-weighting},
+  year    = {2023},
+  howpublished = {arXiv:2311.16214 [quant-ph]},
+  eprint  = {2311.16214},
+  archivePrefix = {arXiv},
+  annote = {Author list verified against the arXiv abstract page on 2026-09-04. Directly relevant prior art for E9's decoder-reweighting-on-drift idea; cited in \S1 and \S8 alongside google2023suppressing.},
+}
+
+@article{page1954continuous,
+  author  = {Page, E. S.},
+  title   = {Continuous Inspection Schemes},
+  journal = {Biometrika},
+  volume  = {41},
+  number  = {1--2},
+  pages   = {100--115},
+  year    = {1954},
+  doi     = {10.1093/biomet/41.1-2.100},
+  annote = {Foundational CUSUM/sequential-detection reference; the W2d rung (E7) and the fixed-window upgrade both use a one-sided CUSUM in the style of this paper.},
+}
+
+%% ---- Added 2026-09-04 (bibliography expansion) ----
+%% Cited only where credit for a concept, a tool, or a prior mechanism is owed, or where a factual claim
+%% about the field needs support. Every entry was verified against Crossref / arXiv / publisher metadata
+%% on 2026-09-04; entries with an annote carry their verification route.
+
+@misc{gottesman1997stabilizer,
+  author = {Gottesman, Daniel},
+  title = {{Stabilizer Codes and Quantum Error Correction}},
+  howpublished = {arXiv:quant-ph/9705052 [quant-ph]},
+  year = {1997},
+  eprint = {quant-ph/9705052},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{kitaev2003anyons,
+  author = {Kitaev, A. Yu.},
+  title = {Fault-tolerant quantum computation by anyons},
+  journal = {Annals of Physics},
+  volume = {303},
+  pages = {2--30},
+  year = {2003},
+  doi = {10.1016/S0003-4916(02)00018-0},
+  eprint = {quant-ph/9707021},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@misc{bravyi1998boundary,
+  author = {Bravyi, S. B. and Kitaev, A. Yu.},
+  title = {Quantum codes on a lattice with boundary},
+  howpublished = {arXiv:quant-ph/9811052 [quant-ph]},
+  year = {1998},
+  eprint = {quant-ph/9811052},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{dennis2002topological,
+  author = {Dennis, Eric and Kitaev, Alexei and Landahl, Andrew and Preskill, John},
+  title = {Topological quantum memory},
+  journal = {Journal of Mathematical Physics},
+  volume = {43},
+  pages = {4452--4505},
+  year = {2002},
+  doi = {10.1063/1.1499754},
+  eprint = {quant-ph/0110143},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{tomita2014lowdistance,
+  author = {Tomita, Yu and Svore, Krysta M.},
+  title = {Low-distance Surface Codes under Realistic Quantum Noise},
+  journal = {Physical Review A},
+  volume = {90},
+  pages = {062320},
+  year = {2014},
+  doi = {10.1103/PhysRevA.90.062320},
+  eprint = {1404.3747},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{edmonds1965blossom,
+  author = {Edmonds, Jack},
+  title = {Paths, Trees, and Flowers},
+  journal = {Canadian Journal of Mathematics},
+  volume = {17},
+  pages = {449--467},
+  year = {1965},
+  doi = {10.4153/CJM-1965-045-4}
+}
+
+@article{ghosh2013leakage,
+  author = {Ghosh, Joydip and Fowler, Austin G. and Martinis, John M. and Geller, Michael R.},
+  title = {Understanding the effects of leakage in superconducting quantum error detection circuits},
+  journal = {Physical Review A},
+  volume = {88},
+  pages = {062329},
+  year = {2013},
+  doi = {10.1103/PhysRevA.88.062329},
+  eprint = {1306.0925},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{klimov2018fluctuations,
+  author = {Klimov, P. V. and Kelly, J. and Chen, Z. and Neeley, M. and Megrant, A. and Burkett, B. and Barends, R. and Arya, K. and Chiaro, B. and Chen, Yu and Dunsworth, A. and Fowler, A. and Foxen, B. and Gidney, C. and Giustina, M. and Graff, R. and Huang, T. and Jeffrey, E. and Lucero, Erik and Mutus, J. Y. and Naaman, O. and Neill, C. and Quintana, C. and Roushan, P. and Sank, Daniel and Vainsencher, A. and Wenner, J. and White, T. C. and Boixo, S. and Babbush, R. and Smelyanskiy, V. N. and Neven, H. and Martinis, John M.},
+  title = {Fluctuations of Energy-Relaxation Times in Superconducting Qubits},
+  journal = {Physical Review Letters},
+  volume = {121},
+  pages = {090502},
+  year = {2018},
+  doi = {10.1103/PhysRevLett.121.090502},
+  eprint = {1809.01043},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{bravyi2018coherent,
+  author = {Bravyi, Sergey and Englbrecht, Matthias and Koenig, Robert and Peard, Nolan},
+  title = {Correcting coherent errors with surface codes},
+  journal = {npj Quantum Information},
+  volume = {4},
+  pages = {55},
+  year = {2018},
+  doi = {10.1038/s41534-018-0106-y},
+  eprint = {1710.02270},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{terhal2005nonmarkovian,
+  author = {Terhal, Barbara M. and Burkard, Guido},
+  title = {Fault-tolerant quantum computation for local non-{Markovian} noise},
+  journal = {Physical Review A},
+  volume = {71},
+  pages = {012336},
+  year = {2005},
+  doi = {10.1103/PhysRevA.71.012336},
+  eprint = {quant-ph/0402104},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{proctor2020drift,
+  author = {Proctor, Timothy and Revelle, Melissa and Nielsen, Erik and Rudinger, Kenneth and Lobser, Daniel and Maunz, Peter and Blume-Kohout, Robin and Young, Kevin},
+  title = {Detecting and tracking drift in quantum information processors},
+  journal = {Nature Communications},
+  volume = {11},
+  pages = {5396},
+  year = {2020},
+  doi = {10.1038/s41467-020-19074-4},
+  eprint = {1907.13608},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{acharya2025belowthreshold,
+  author = {{Google Quantum AI and Collaborators}},
+  title = {Quantum error correction below the surface code threshold},
+  journal = {Nature},
+  volume = {638},
+  pages = {920--926},
+  year = {2025},
+  doi = {10.1038/s41586-024-08449-y},
+  eprint = {2408.13687},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@misc{fujiwara2014instantaneous,
+  author = {Fujiwara, Yuichiro},
+  title = {Instantaneous quantum channel estimation during quantum information processing},
+  year = {2014},
+  eprint = {1405.6267},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph},
+  howpublished = {arXiv:1405.6267 [quant-ph]}
+}
+
+@misc{combes2014insitu,
+  author = {Combes, Joshua and Ferrie, Christopher and Cesare, Chris and Tiersch, Markus and Milburn, G. J. and Briegel, Hans J. and Caves, Carlton M.},
+  title = {In-situ characterization of quantum devices with error correction},
+  year = {2014},
+  eprint = {1405.5656},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph},
+  howpublished = {arXiv:1405.5656 [quant-ph]}
+}
+
+@article{huo2017realtime,
+  author = {Ming-Xia Huo and Ying Li},
+  title = {Learning time-dependent noise to reduce logical errors: Real time error rate estimation in quantum error correction},
+  journal = {New Journal of Physics},
+  volume = {19},
+  number = {12},
+  pages = {123032},
+  year = {2017},
+  doi = {10.1088/1367-2630/aa916e},
+  eprint = {1710.03636},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{nickerson2019correlated,
+  author = {Nickerson, Naomi H. and Brown, Benjamin J.},
+  title = {Analysing correlated noise on the surface code using adaptive decoding algorithms},
+  journal = {Quantum},
+  volume = {3},
+  pages = {131},
+  year = {2019},
+  doi = {10.22331/q-2019-04-08-131},
+  eprint = {1712.00502},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{wagner2021optimal,
+  author = {Wagner, Thomas and Kampermann, Hermann and Bru{\ss}, Dagmar and Kliesch, Martin},
+  title = {Optimal noise estimation from syndrome statistics of quantum codes},
+  journal = {Physical Review Research},
+  volume = {3},
+  number = {1},
+  pages = {013292},
+  year = {2021},
+  doi = {10.1103/PhysRevResearch.3.013292},
+  eprint = {2010.02243},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{wagner2022paulichannels,
+  author = {Wagner, Thomas and Kampermann, Hermann and Bru{\ss}, Dagmar and Kliesch, Martin},
+  title = {{Pauli} channels can be estimated from syndrome measurements in quantum error correction},
+  journal = {Quantum},
+  volume = {6},
+  pages = {809},
+  year = {2022},
+  doi = {10.22331/q-2022-09-19-809},
+  eprint = {2107.14252},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{chen2022calibrated,
+  author = {Chen, Edward H. and Yoder, Theodore J. and Kim, Youngseok and Sundaresan, Neereja and Srinivasan, Srikanth and Li, Muyuan and Córcoles, Antonio D. and Cross, Andrew W. and Takita, Maika},
+  title = {Calibrated Decoders for Experimental Quantum Error Correction},
+  journal = {Physical Review Letters},
+  volume = {128},
+  pages = {110504},
+  year = {2022},
+  doi = {10.1103/PhysRevLett.128.110504},
+  eprint = {2110.04285},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{sivak2024priors,
+  author = {Sivak, Volodymyr and Newman, Michael and Klimov, Paul},
+  title = {Optimization of decoder priors for accurate quantum error correction},
+  journal = {Physical Review Letters},
+  volume = {133},
+  pages = {150603},
+  year = {2024},
+  doi = {10.1103/PhysRevLett.133.150603},
+  eprint = {2406.02700},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@misc{blumekohout2025dem,
+  author = {Blume-Kohout, Robin and Young, Kevin},
+  title = {Estimating detector error models from syndrome data},
+  howpublished = {arXiv:2504.14643 [quant-ph]},
+  year = {2025},
+  eprint = {2504.14643},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@misc{bhardwaj2025drifting,
+  author = {Bhardwaj, Devansh and Takou, Evangelia and Lin, Yingjia and Brown, Kenneth R.},
+  title = {Adaptive Estimation of Drifting Noise in Quantum Error Correction},
+  year = {2025},
+  eprint = {2511.09491},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph},
+  howpublished = {arXiv:2511.09491 [quant-ph]}
+}
+
+@misc{poster2026reloqate,
+  author = {Poster, Maxwell and Chadwick, Jason and Baker, Jonathan Mark},
+  title = {{ReloQate}: Transient Drift Detection and In-Situ Recalibration in Surface Code Quantum Error Correction},
+  year = {2026},
+  eprint = {2603.00837},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph},
+  howpublished = {arXiv:2603.00837 [quant-ph]}
+}
+
+@article{spitz2018adaptive,
+  author = {Spitz, Stephen T. and Tarasinski, Brian and Beenakker, Carlo W. J. and O'Brien, Thomas E.},
+  title = {Adaptive Weight Estimator for Quantum Error Correction in a Time-Dependent Environment},
+  journal = {Advanced Quantum Technologies},
+  volume = {1},
+  pages = {1800012},
+  year = {2018},
+  doi = {10.1002/qute.201800012},
+  eprint = {1712.02360},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{gicev2024syndrome,
+  author = {Gicev, Spiro and Hollenberg, Lloyd C. L. and Usman, Muhammad},
+  title = {Quantum computer error structure probed by quantum error correction syndrome measurements},
+  journal = {Physical Review Research},
+  volume = {6},
+  number = {4},
+  pages = {043249},
+  year = {2024},
+  doi = {10.1103/PhysRevResearch.6.043249}
+}
+
+@misc{remm2025syndromecorrelations,
+  author = {Remm, Ants and Lacroix, Nathan and B\"odeker, Lukas and Genois, Elie and Hellings, Christoph and Swiadek, Fran\c{c}ois and Norris, Graham J. and Eichler, Christopher and Blais, Alexandre and M\"uller, Markus and Krinner, Sebastian and Wallraff, Andreas},
+  title = {Experimentally Informed Decoding of Stabilizer Codes Based on Syndrome Correlations},
+  howpublished = {arXiv:2502.17722 [quant-ph]},
+  year = {2025},
+  eprint = {2502.17722},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@misc{fowler2014scalable,
+  author = {Fowler, Austin G. and Sank, D. and Kelly, J. and Barends, R. and Martinis, John M.},
+  title = {Scalable extraction of error models from the output of error detection circuits},
+  howpublished = {arXiv:1405.1454 [quant-ph]},
+  year = {2014},
+  eprint = {1405.1454},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{hotelling1931ratio,
+  author = {Harold Hotelling},
+  title = {The generalization of {Student}'s ratio},
+  journal = {The Annals of Mathematical Statistics},
+  volume = {2},
+  number = {3},
+  pages = {360--378},
+  year = {1931},
+  doi = {10.1214/aoms/1177732979}
+}
+
+@article{efron1979bootstrap,
+  author = {B. Efron},
+  title = {Bootstrap Methods: Another Look at the Jackknife},
+  journal = {The Annals of Statistics},
+  volume = {7},
+  number = {1},
+  pages = {1--26},
+  year = {1979},
+  doi = {10.1214/aos/1176344552}
+}
+
+@article{krause2008sensor,
+  author = {Krause, Andreas and Singh, Ajit and Guestrin, Carlos},
+  title = {Near-optimal sensor placements in {Gaussian} processes: Theory, efficient algorithms and empirical studies},
+  journal = {Journal of Machine Learning Research},
+  volume = {9},
+  number = {8},
+  pages = {235--284},
+  year = {2008}
+}
+
+@article{nemhauser1978greedy,
+  author = {Nemhauser, G. L. and Wolsey, L. A. and Fisher, M. L.},
+  title = {An Analysis of Approximations for Maximizing Submodular Set Functions---I},
+  journal = {Mathematical Programming},
+  volume = {14},
+  pages = {265--294},
+  year = {1978},
+  doi = {10.1007/BF01588971}
+}
+
+@misc{das2011submodular,
+  author = {Das, Abhimanyu and Kempe, David},
+  title = {Submodular meets spectral: Greedy algorithms for subset selection, sparse approximation and dictionary selection},
+  howpublished = {arXiv:1102.3975 [stat.ML]},
+  year = {2011},
+  doi = {10.48550/arXiv.1102.3975},
+  eprint = {1102.3975},
+  archivePrefix = {arXiv},
+  primaryClass = {stat.ML}
+}
+
+@book{odonnell2014analysis,
+  author    = {O'Donnell, Ryan},
+  title     = {Analysis of {Boolean} Functions},
+  publisher = {Cambridge University Press},
+  address   = {Cambridge},
+  year      = {2014},
+  eprint    = {2105.10386},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.DM}
+}
+
+@article{gneiting2007proper,
+  author = {Gneiting, Tilmann and Raftery, Adrian E.},
+  title = {Strictly Proper Scoring Rules, Prediction, and Estimation},
+  journal = {Journal of the American Statistical Association},
+  volume = {102},
+  number = {477},
+  pages = {359--378},
+  year = {2007},
+  doi = {10.1198/016214506000001437}
+}
+
+@article{rabiner1989hmm,
+  author = {Rabiner, L. R.},
+  title = {A Tutorial on Hidden {Markov} Models and Selected Applications in Speech Recognition},
+  journal = {Proceedings of the IEEE},
+  volume = {77},
+  number = {2},
+  pages = {257--286},
+  year = {1989},
+  doi = {10.1109/5.18626}
+}
+
+@article{shalizi2001computational,
+  author = {Cosma Rohilla Shalizi and James P. Crutchfield},
+  title = {{Computational Mechanics}: Pattern and Prediction, Structure and Simplicity},
+  journal = {Journal of Statistical Physics}, volume = {104}, pages = {817--879}, year = {2001},
+  doi = {10.1023/A:1010388907793}, eprint = {cond-mat/9907176}, archivePrefix = {arXiv}, primaryClass = {cond-mat.stat-mech}
+}
+
+@article{crutchfield1989statistical,
+  author = {James P. Crutchfield and Karl Young},
+  title = {Inferring statistical complexity},
+  journal = {Physical Review Letters}, volume = {63}, pages = {105--108}, year = {1989},
+  doi = {10.1103/PhysRevLett.63.105}
+}
+
+@inproceedings{littman2001predictive,
+  author    = {Littman, Michael L. and Sutton, Richard S. and Singh, Satinder},
+  title     = {Predictive Representations of State},
+  booktitle = {Advances in Neural Information Processing Systems 14 ({NIPS} 2001)},
+  pages     = {1555--1561},
+  year      = {2001},
+  annote    = {Author list (incl. Singh) and pages verified via dblp on 2026-09-04; the legacy NeurIPS page lists only the first two authors.}
+}
+
+@article{hoel2013causal,
+  author = {Erik P. Hoel and Larissa Albantakis and Giulio Tononi},
+  title = {Quantifying causal emergence shows that macro can beat micro},
+  journal = {Proceedings of the National Academy of Sciences}, volume = {110}, number = {49}, pages = {19790--19795}, year = {2013},
+  doi = {10.1073/pnas.1314922110}
+}
+
+@article{israeli2006coarse,
+  author = {Navot Israeli and Nigel Goldenfeld},
+  title = {Coarse-graining of cellular automata, emergence, and the predictability of complex systems},
+  journal = {Physical Review E}, volume = {73}, pages = {026203}, year = {2006},
+  doi = {10.1103/PhysRevE.73.026203}
+}
+
+@article{pfante2014closure,
+  author = {Oliver Pfante and Eckehard Olbrich and Nils Bertschinger and Nihat Ay and Jürgen Jost},
+  title = {Closure measures for coarse-graining of the tent map},
+  journal = {Chaos}, volume = {24}, number = {1}, pages = {013136}, year = {2014},
+  doi = {10.1063/1.4869075}
+}
+
+@article{chorin2000mori,
+  author = {Alexandre J. Chorin and Ole H. Hald and Raz Kupferman},
+  title = {Optimal prediction and the {Mori--Zwanzig} representation of irreversible processes},
+  journal = {Proceedings of the National Academy of Sciences}, volume = {97}, number = {7}, pages = {2968--2973}, year = {2000},
+  doi = {10.1073/pnas.97.7.2968}
+}
+
+@article{buchholz1994lumpability,
+  author = {Buchholz, Peter},
+  title = {Exact and ordinary lumpability in finite {Markov} chains},
+  journal = {Journal of Applied Probability},
+  volume = {31},
+  number = {1},
+  pages = {59--75},
+  year = {1994},
+  doi = {10.2307/3215235}
+}
+
+@article{barnett2023dynamical,
+  author = {Barnett, L. and Seth, A. K.},
+  title = {Dynamical independence: Discovering emergent macroscopic processes in complex dynamical systems},
+  journal = {Physical Review E},
+  volume = {108},
+  number = {1},
+  pages = {014304},
+  year = {2023},
+  doi = {10.1103/PhysRevE.108.014304},
+  eprint = {2106.06511},
+  archivePrefix = {arXiv},
+  primaryClass = {nlin.CD}
+}
+
+@article{nosek2018preregistration,
+  author = {Nosek, Brian A. and Ebersole, Charles R. and DeHaven, Alexander C. and Mellor, David T.},
+  title = {The preregistration revolution},
+  journal = {Proceedings of the National Academy of Sciences},
+  volume = {115},
+  number = {11},
+  pages = {2600--2606},
+  year = {2018},
+  doi = {10.1073/pnas.1708274114}
+}
+
+@book{mayo2018severe,
+  author    = {Mayo, Deborah G.},
+  title     = {Statistical Inference as Severe Testing: How to Get Beyond the Statistics Wars},
+  publisher = {Cambridge University Press},
+  address   = {Cambridge},
+  year      = {2018},
+  doi       = {10.1017/9781107286184}
+}
+
+@book{popper1959logic,
+  author    = {Popper, Karl R.},
+  title     = {The Logic of Scientific Discovery},
+  publisher = {Hutchinson},
+  address   = {London},
+  year      = {1959}
+}
+
+@book{lakatos1978methodology,
+  author    = {Lakatos, Imre},
+  title     = {The Methodology of Scientific Research Programmes: Philosophical Papers, Volume 1},
+  publisher = {Cambridge University Press},
+  address   = {Cambridge},
+  year      = {1978},
+  doi       = {10.1017/CBO9780511621123},
+  annote    = {Edited by John Worrall and Gregory Currie (editor field omitted: plainnat rejects author+editor on @book).}
+}
+
+@article{rosenthal1979filedrawer,
+  author = {Rosenthal, Robert},
+  title = {The file drawer problem and tolerance for null results},
+  journal = {Psychological Bulletin},
+  volume = {86},
+  number = {3},
+  pages = {638--641},
+  year = {1979},
+  doi = {10.1037/0033-2909.86.3.638}
+}
+
+@article{peng2011reproducible,
+  author = {Peng, Roger D.},
+  title = {Reproducible Research in Computational Science},
+  journal = {Science},
+  volume = {334},
+  number = {6060},
+  pages = {1226--1227},
+  year = {2011},
+  doi = {10.1126/science.1213847}
+}
+
+@article{schwab2000redoc,
+  author = {Schwab, Matthias and Karrenbach, Norbert and Claerbout, Jon},
+  title = {Making scientific computations reproducible},
+  journal = {Computing in Science and Engineering},
+  volume = {2},
+  number = {6},
+  pages = {61--67},
+  year = {2000},
+  doi = {10.1109/5992.881708}
+}
+
+@article{kobori2025bayesian,
+  author = {Kobori, Takumi and Todo, Synge},
+  title = {{Bayesian} inference of general noise-model parameters from the syndrome statistics of surface codes},
+  journal = {Physical Review A},
+  volume = {112},
+  pages = {052448},
+  year = {2025},
+  doi = {10.1103/wg5h-spy6}
+}
+
+@article{kelly2016insitucalibration,
+  author = {Kelly, J. and Barends, R. and Fowler, A. G. and Megrant, A. and Jeffrey, E. and White, T. C. and Sank, D. and Mutus, J. Y. and Campbell, B. and Chen, Yu and Chen, Z. and Chiaro, B. and Dunsworth, A. and Lucero, E. and Neeley, M. and Neill, C. and O'Malley, P. J. J. and Quintana, C. and Roushan, P. and Vainsencher, A. and Wenner, J. and Martinis, John M.},
+  title = {Scalable {in situ} qubit calibration during repetitive error detection},
+  journal = {Physical Review A},
+  volume = {94},
+  pages = {032321},
+  year = {2016},
+  doi = {10.1103/PhysRevA.94.032321}
+}
+
+@article{varbanov2020hmm,
+  author = {Varbanov, Boris Mihailov and Battistel, Francesco and Tarasinski, Brian Michael and Ostroukh, Viacheslav Petrovych and O'Brien, Thomas Eugene and DiCarlo, Leonardo and Terhal, Barbara Maria},
+  title = {Leakage detection for a transmon-based surface code},
+  journal = {npj Quantum Information},
+  volume = {6},
+  number = {1},
+  pages = {102},
+  year = {2020},
+  doi = {10.1038/s41534-020-00330-w},
+  eprint = {2002.07119},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{bultink2020leakage,
+  author = {Bultink, C. C. and O'Brien, T. E. and Vollmer, R. and Muthusubramanian, N. and Beekman, M. W. and Rol, M. A. and Fu, X. and Tarasinski, B. and Ostroukh, V. and Varbanov, B. and Bruno, A. and DiCarlo, L.},
+  title = {Protecting quantum entanglement from leakage and qubit errors via repetitive parity measurements},
+  journal = {Science Advances},
+  volume = {6},
+  number = {12},
+  pages = {eaay3050},
+  year = {2020},
+  doi = {10.1126/sciadv.aay3050}
+}
+
+@article{kam2025nonmarkovian,
+  author = {Kam, John F. and Gicev, Spiro and Modi, Kavan and Southwell, Angus and Usman, Muhammad},
+  title = {Detrimental non-{Markovian} errors for surface code memory},
+  journal = {Quantum Science and Technology},
+  volume = {10},
+  number = {3},
+  pages = {035060},
+  year = {2025},
+  doi = {10.1088/2058-9565/adebab},
+  eprint = {2410.23779},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{berthusen2024partialsyndrome,
+  author = {Berthusen, Noah and Gottesman, Daniel},
+  title = {Partial {S}yndrome {M}easurement for {H}ypergraph {P}roduct {C}odes},
+  journal = {Quantum},
+  volume = {8},
+  pages = {1345},
+  year = {2024},
+  doi = {10.22331/q-2024-05-14-1345},
+  eprint = {2306.17122},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{berthusen2025adaptivesyndrome,
+  author = {Berthusen, Noah and Tan, Shi Jie Samuel and Huang, Eric and Gottesman, Daniel},
+  title = {Adaptive {S}yndrome {E}xtraction},
+  journal = {PRX Quantum},
+  volume = {6},
+  number = {3},
+  pages = {030307},
+  year = {2025},
+  doi = {10.1103/ps3r-wf84},
+  eprint = {2502.14835},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{tansuwannont2023adaptivesyndrome,
+  author = {Tansuwannont, Theerapat and Pato, Balint and Brown, Kenneth R.},
+  title = {Adaptive syndrome measurements for {S}hor-style error correction},
+  journal = {Quantum},
+  volume = {7},
+  pages = {1075},
+  year = {2023},
+  doi = {10.22331/q-2023-08-08-1075},
+  eprint = {2208.05601},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph}
+}
+
+@article{harper2023correlated,
+  author = {Robin Harper and Steven T. Flammia},
+  title = {Learning Correlated Noise in a 39-Qubit Quantum Processor},
+  journal = {PRX Quantum},
+  volume = {4},
+  number = {4},
+  pages = {040311},
+  year = {2023},
+  doi = {10.1103/PRXQuantum.4.040311}
+}
+
+@article{chen2021exponential,
+  author  = {{Google Quantum AI}},
+  title   = {Exponential suppression of bit or phase errors with cyclic error correction},
+  journal = {Nature},
+  volume  = {595},
+  number  = {7867},
+  pages   = {383--387},
+  year    = {2021},
+  doi     = {10.1038/s41586-021-03588-y},
+  eprint  = {2102.06132},
+  archivePrefix = {arXiv},
+  primaryClass = {quant-ph},
+  annote  = {Crossref lists the collaboration first followed by ~90 individual authors (Zijun Chen et al.); the collaboration convention matches google2023suppressing. Source of the pairwise detector-correlation (p_ij) calibration used in E9's recalibration.}
+}
+
+@book{kemeny1960finite,
+  author    = {Kemeny, John G. and Snell, J. Laurie},
+  title     = {Finite {Markov} Chains},
+  publisher = {Van Nostrand},
+  address   = {Princeton, NJ},
+  year      = {1960},
+  annote    = {Original edition (reprinted by Springer, Undergraduate Texts in Mathematics, 1976). Existence/publisher/year verified via contemporaneous reviews indexed in Crossref (Amer. Math. Monthly 1960, doi:10.2307/2309264; JASA 1961, doi:10.2307/2282356). Canonical source for lumpability.}
+}
+
+@book{cover2006elements,
+  author    = {Cover, Thomas M. and Thomas, Joy A.},
+  title     = {Elements of Information Theory},
+  edition   = {2nd},
+  publisher = {Wiley},
+  address   = {Hoboken, NJ},
+  year      = {2006},
+  doi       = {10.1002/047174882X},
+  annote    = {Verified via Crossref (Wiley, ISBN 9780471241959). Cited for Stein's lemma / KL divergence as the per-sample hypothesis-discrimination rate (Section 7, Finding 4).}
+}

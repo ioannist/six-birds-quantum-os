@@ -1,0 +1,42 @@
+\section{Methods: the evidence discipline}
+\label{sec:methods}
+
+The prototype's credibility rests on process, so we describe the process at the same level of care as the mathematics.
+
+\subsection{Registered predictions}
+\label{sec:methods-registration}
+
+Every scored prediction was written down with a numeric pass/fail bar in a frozen design document, and every descriptive report was declared, without a bar, alongside it. For E1--E7 this happened \emph{before} the experiment was implemented; for E8--E9, whose infrastructure had to exist before a pilot could run, the bars were frozen from a pilot on disjoint seeds before the scored run (below). This is pre-registration in the sense of~\cite{nosek2018preregistration}, applied to a simulation study. A prediction that fails is reported as \gRegNeg{} with its frozen bar and measured value; it is never deleted, softened, or re-run with tuned parameters (a changed re-run is a new experiment, labeled as such). The original build froze 25 predictions across six experiments (E1--E6); the follow-up investigation of Section~\ref{sec:arc} froze a further 7 (E7), 2 scored plus 1 descriptive (E8), and 2 scored plus 2 descriptive (E9). % F-147
+For the circuit-level experiments E8 and E9, where no closed-form moment engine exists, exact pre-derivation was replaced by a declared \emph{pilot-then-freeze} protocol: effect sizes were estimated on a pilot seed range disjoint from the scored seeds, numeric bars were frozen in the design addendum and in the runners' registered-prediction code before the scored run executed, and the pilot-to-freeze step was itself logged. % C-38
+
+\subsection{Evidential grades}
+\label{sec:methods-grades}
+
+Every scientific claim in this paper carries exactly one of six grades, fixed in the design documents before any experiment ran (infrastructure statements such as test counts and hashes are marked count/meta in the inventory and carry no evidential weight): \gTheorem{} (an instance of a cited SBT theorem verified computationally---the strongest grade the prototype can issue), \gExact{} (exact rational computation on a declared finite model), \gMeasured{} (seeded sampling with reported uncertainty), \gRegPos{} / \gRegNeg{} (a frozen prediction that passed / failed), and \gInterp{} (connective reading; carries no evidential weight). Sentences never blend grades; where a result and its reading must appear together, they are split.
+
+\subsection{Exactness, precisely scoped}
+\label{sec:methods-exact}
+
+The modules \emph{labeled} exact---the moment engine's exact branch, the residual/discharge/chain-rule construction, and the entire predictive-quotient engine---use rational arithmetic (\texttt{Fraction}) end to end, with no floating point on those code paths, and are gated by brute-force enumeration cross-checks in the test suite. % C-36
+This label must not be generalized: the blind-spot witness extracts eigenvectors in floating point from exactly computed matrices; the chain-rule identity's reported discrepancy is a float comparison of exact matrices; Markov stationary distributions use floating-point linear algebra; and the circuit-level modules of Sections~\ref{sec:e8}--\ref{sec:e9} are floating-point throughout, by declaration, because this prototype has no exact moment engine at circuit level. The repository's report carries the file-by-file float audit; this paper cites that audit rather than paraphrasing it more broadly. % C-36
+
+\subsection{The null battery}
+\label{sec:methods-nulls}
+
+Nine standing controls (the framework's ``null battery''~\cite{sbt-ng}) were implemented alongside the positive mechanisms: % F-164
+the protocol trap (Section~\ref{sec:sbt-trap}); same-family saturation (duplicated checks must show exactly zero discharge); null-model calibration (false-positive rates of every witness under the declared model); proxy-cost failure; slack-regime checks; a no-silent-caps rule (any truncation of a candidate family is logged with exact counts); the trivialization guard (a decoder that collapses the logical layer must classify \texttt{trivialized}, not \texttt{certified}); same-support discipline (declared catalogs, no post-hoc edits); and a raw-history comparator (a seeded lookup predictor given the last three syndromes, the current one included, trained on the first half of each trajectory and scored on the second, as a secondary baseline for the memory-payoff claims). The complete ledger with outcomes is Appendix~\ref{app:nulls}.
+
+\subsection{Determinism and reproduction}
+\label{sec:methods-repro}
+
+Every run is seeded and configured from committed JSON; identical inputs produce byte-identical result files (floats serialized at full precision, keys sorted). Each experiment directory carries its configuration, results, figures with their exact CSV data twins, an environment record, and a SHA-256 manifest of every result and data file (the manifest itself and the environment record are outside the hash set). A single command regenerates all nine experiments and verifies the manifests; it was run twice in a row with byte-identical results, and the prototype's test suite passes 149 tests. % F-145, C-37
+This is the standard of computational reproducibility in which the executable computation, not a description of it, is the deliverable~\cite{schwab2000redoc,peng2011reproducible}.
+Section~\ref{sec:repro} gives the exact environment and commands.
+
+\subsection{Deviations log}
+\label{sec:methods-deviations}
+
+Any divergence between the frozen designs and the running code was recorded, dated, and reasoned in a public deviations file---never silently absorbed. The final log has 8 entries (Appendix~\ref{app:deviations}), and we draw attention to their character now: several are self-caught correctness fixes made \emph{before} results were frozen (including two rounds of pilot-driven repair to the closed-loop witness policy of Section~\ref{sec:e9}); one is a post-close audit correction to a cross-check estimator, whose ledger entry was added only after an external adversarial review found the fix documented in prose but missing here; and the closed-loop entry also records a budget-matching correction made after that experiment's first frozen run, which was then re-run and re-frozen. % F-165
+The deviations file is evidence for the process claim, not embarrassment to be minimized---which is why it is an appendix and not a footnote. % C-38
+
+% ===========================================================================
