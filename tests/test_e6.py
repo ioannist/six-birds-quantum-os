@@ -1,4 +1,5 @@
 import json
+from fractions import Fraction
 from pathlib import Path
 
 import pytest
@@ -60,6 +61,10 @@ def test_e6_exact_value_curve_and_slack_spots(e6_run):
     assert results["rep5"]["V_exact"][16] == pytest.approx(0.1653247504, abs=1e-8)
     assert results["rep5"]["lambda_exact"][15] == pytest.approx(1.73797e-5, abs=1e-8)
     assert results["rep5"]["slack_point"] == 16
+    values = tuple(Fraction(value) for value in results["rep5"]["V_exact_rational"])
+    marginals = tuple(Fraction(value) for value in results["rep5"]["lambda_exact_rational"])
+    assert marginals == tuple(b - a for a, b in zip(values, values[1:]))
+    assert [float(value) for value in values] == results["rep5"]["V_exact"]
 
 
 def test_e6_honest_negative_verdicts_for_p61_p62(e6_run):

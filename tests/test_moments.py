@@ -10,6 +10,16 @@ from sbqos.noise import n1, n2, n3, n4, n5, sample_error
 from sbqos import rng
 
 
+@pytest.mark.parametrize("probability", [Fraction(-1, 100), Fraction(101, 100)])
+def test_noise_constructors_reject_nonstochastic_transition_probabilities(probability):
+    with pytest.raises(ValueError, match="injection probability"):
+        n3(Fraction(1, 20), probability, 3, (0, 1))
+    with pytest.raises(ValueError, match="transition probability"):
+        n4(Fraction(1, 20), probability, 3)
+    with pytest.raises(ValueError, match="transition probability"):
+        n5(Fraction(1, 20), probability, 3, 1)
+
+
 def _pauli(n, xs=(), zs=()):
     e = np.zeros(2 * n, dtype=np.uint8)
     for q in xs:

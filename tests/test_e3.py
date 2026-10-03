@@ -1,11 +1,12 @@
 import json
+from fractions import Fraction
 from pathlib import Path
 
 import pytest
 
 from sbqos.artifacts import load_config, verify_manifest
 from sbqos.experiments import common
-from sbqos.experiments.e3_check_selection import main
+from sbqos.experiments.e3_check_selection import _rep3_ladder, main
 
 
 CONFIG_PATH = Path("src/sbqos/configs/e3.json")
@@ -61,6 +62,7 @@ def test_e3_spot_values_match_manager_ground_truth(e3_run):
     rung2 = results["rep3_ladder"]["rungs"][1]["trace_xi"]
     assert rung2 == pytest.approx(0.027574927113702623, rel=1e-12)
     assert results["rep3_ladder"]["exact_mmse_fraction"] == "47291/1715000"
+    assert results["rep3_ladder"]["rung2_trace_fraction"] == "47291/1715000"
     assert results["rep3_ladder"]["rung2_minus_mmse"] == 0.0
 
 
@@ -70,3 +72,10 @@ def test_e3_surf5_cap_drop_count_is_reported(e3_run):
 
     assert cap_log["dropped_pairs"] > 0
     assert cap_log["total_degree2_pairs"] == cap_log["kept_adjacent_pairs"] + cap_log["dropped_pairs"]
+
+
+@pytest.mark.parametrize("p", [Fraction(0), Fraction(1)])
+def test_complete_ladder_mmse_at_deterministic_noise_endpoints(p):
+    result = _rep3_ladder(p, 1e-12)
+    assert result["exact_mmse"] == 0
+    assert result["mmse_equal"]

@@ -81,7 +81,7 @@ def sample_shots(
     Ref: design/01_MATH_SPEC.md §3.5.
     """
     probes = L.vecs + D.vecs
-    if model.hidden is not None or not _all_commute(probes):
+    if model.hidden is not None or not _all_commute(probes) or any(not np.any(vec) for vec in probes):
         return _sample_classical(code, model, L, D, N, rng)
 
     circuit = stim.Circuit()

@@ -3,6 +3,27 @@
 One dated entry per deviation, with reason. Per `00_OVERVIEW.md`'s rule: the implementing agent must not
 deviate from the frozen design docs without recording a note here.
 
+## 2026-10-03 — Mathematical audit repairs to exact arithmetic and closure domains
+
+The review requested after the release checkpoint found that exhaustive pricing
+enumeration converted exact residuals and costs to floats before optimizing,
+and shadow prices subtracted rounded values. The exact engine now retains
+rational arithmetic through these operations. E6 adds rational output twins;
+its existing numeric fields remain numeric copies for plots and consumers.
+This strengthens the exactness claim without changing frozen costs or bars.
+
+Exact chain-rule discrepancies, E1 saturation assertions, and E3's MMSE
+equality verdict now compare rational quantities directly. Exact uniform
+stationarity is checked algebraically. Closure calculations now respect
+arbitrary macro labels and ignore zero-weight fibers. Package construction
+rejects invalid probability data, and a checked M-to-Q comparison map exposes
+the refinement premise that a finite future catalog may omit. Constant probes
+are sampled as legal character observables. The residual docstring uses
+affine-estimator residual covariance rather than conditional covariance.
+
+The original design and paper files remain frozen. These repairs and the
+unfinished experiment review are tracked in `MATHEMATICS_AUDIT.md`.
+
 ---
 
 ## 2026-07-05 — `route_mismatch`'s absorbing-model guard blocks a mandatory N5 deliverable (deferred to T8/E4)

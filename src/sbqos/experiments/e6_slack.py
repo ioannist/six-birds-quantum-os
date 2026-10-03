@@ -73,10 +73,12 @@ def _rep5_curves(p, lambda_tol: float) -> dict:
     result = {
         "b_max": b_max,
         "V_greedy": list(V_greedy),
-        "V_exact": list(V_exact),
+        "V_exact": [float(value) for value in V_exact],
+        "V_exact_rational": [str(value) for value in V_exact],
         "greedy_gap": gaps,
         "max_greedy_gap": max(gaps),
-        "lambda_exact": list(lam),
+        "lambda_exact": [float(value) for value in lam],
+        "lambda_exact_rational": [str(value) for value in lam],
         "slack_point": slack_point(lam, lambda_tol),
         "descriptive_slack_points": {
             "1e-4": slack_point(lam, 1e-4),

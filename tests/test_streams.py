@@ -55,6 +55,17 @@ def test_forced_x_error_on_middle_qubit_matches_rep3_syndrome_and_logical():
     np.testing.assert_array_equal(outcomes[:, 2:], np.ones((5, 1), dtype=np.int8))
 
 
+def test_identity_probe_is_a_constant_observable_in_sampling():
+    code = rep_code(3)
+    L = ProbeFamily("native", (np.zeros(2 * code.n, dtype=np.uint8),), ("I",))
+    D = ProbeFamily("logical", code.logicals[1:], ("Zbar",))
+    shots = sample_shots(code, n1(Fraction(1, 20), code.n), L, D, 100, rng(17))
+    np.testing.assert_array_equal(shots.L_outcomes, np.ones((100, 1), dtype=np.int8))
+    blocks = empirical_blocks(shots, L, D)
+    np.testing.assert_array_equal(blocks.K_LL, np.zeros((1, 1)))
+    np.testing.assert_array_equal(blocks.K_DL, np.zeros((1, 1)))
+
+
 def test_anticommuting_logicals_use_classical_zero_noise_oracle_path(monkeypatch):
     code = rep_code(3)
     L = ProbeFamily("native", code.checks, ("h0", "h1"))

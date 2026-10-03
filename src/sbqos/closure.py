@@ -70,6 +70,9 @@ def prototype_stability(model: MarkovModel, lens: str, tau: int, eps_stable: flo
 def route_mismatch(model: MarkovModel, lens: str, tau: int) -> Fraction | float:
     """Return route mismatch for decoded or syndrome lens.
 
+    Zero characterizes horizon-tau lumpability on the weighting law's support.
+    Full-state lumpability additionally requires a positive weight at every state.
+
     Ref: design/01_MATH_SPEC.md §4.3.
     """
     _require_nonabsorbing_stationary(model, "route_mismatch", "route_mismatch_finite_horizon")
@@ -348,8 +351,12 @@ def _prediction_loss(lens_values: np.ndarray, R: Matrix, weights, p_bar: Matrix)
     total = 0.0
     p_bar_float = _as_float_matrix(p_bar)
     R_float = _as_float_matrix(R)
+    label_to_index = {label: i for i, label in enumerate(sorted(set(int(v) for v in lens_values)))}
     for state, label in enumerate(lens_values):
-        total += float(weights[state]) * _kl(R_float[state], p_bar_float[int(label)])
+        # Off-support fibers have no conditional distribution and no KL cost.
+        if weights[state] == 0:
+            continue
+        total += float(weights[state]) * _kl(R_float[state], p_bar_float[label_to_index[int(label)]])
     return total
 
 
@@ -368,7 +375,7 @@ def _kl(p: np.ndarray, q: np.ndarray) -> float:
         if p_i == 0:
             continue
         if q_i <= 0:
-            raise ValueError("KL encountered q_i == 0 with p_i > 0")
+            return float("inf")
         total += float(p_i) * float(np.log(float(p_i) / float(q_i)))
     return total
 
@@ -432,7 +439,17 @@ def _decoded_expand(model: MarkovModel, labels: tuple[int, ...], exact: bool) ->
     Expand = _zero_matrix(len(labels), model.P.shape[0], exact)
     one = _one(exact)
     for row, label in enumerate(labels):
-        Expand[row, label] = one
+        # Corrected prototypes have zero syndrome and the declared decoded label.
+        # Hidden packages start in mode 0. Labels themselves are not state indices.
+        prototype = next(
+            (i for i in range(len(model.states))
+             if model.lens_syndrome[i] == 0 and model.lens_decoded[i] == label
+             and (not model.lens_mode_hidden or model.states[i][-1] == 0)),
+            None,
+        )
+        if prototype is None:
+            raise ValueError(f"no corrected prototype for decoded label {label}")
+        Expand[row, prototype] = one
     return Expand
 
 
@@ -514,12 +531,13 @@ def _label_onehot(n_labels: int, label_index: int, exact: bool) -> np.ndarray:
 
 
 def _stationary_weights(model: MarkovModel) -> list[Fraction] | np.ndarray:
-    weights = stationary(model.P)
     if not model.exact:
-        return weights
+        return stationary(model.P)
     n_states = model.P.shape[0]
-    uniform = 1.0 / n_states
-    if not np.allclose(weights, np.full(n_states, uniform), atol=1e-12):
+    # Exact uniform stationarity is proved by column sums, not inferred from an
+    # approximately uniform floating eigenvector. This also covers reducible
+    # doubly stochastic chains, where an eigensolver can select another law.
+    if any(sum(model.P[:, j], Fraction(0)) != 1 for j in range(n_states)):
         raise ValueError("exact model stationary distribution is not uniform")
     return [Fraction(1, n_states) for _ in range(n_states)]
 

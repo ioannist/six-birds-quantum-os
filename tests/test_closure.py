@@ -1,10 +1,13 @@
 from fractions import Fraction
+from dataclasses import replace
 
 import numpy as np
 import pytest
 
 from sbqos.closure import (
     _prediction_context,
+    _prediction_loss,
+    _stationary_weights,
     _predictive_fit_counts,
     assemble_certificate,
     closure_deficit,
@@ -274,3 +277,36 @@ def test_full_existence_certificate_trivialized_for_broken_decoder():
     cert = full_existence_certificate(model, tau=1, delta_max=0.0, cd_max=0.0, seed=0)
 
     assert cert.status == "trivialized"
+
+
+def test_closure_and_prototypes_are_invariant_under_macro_relabeling():
+    model = rep3_n1_model("minimum_weight", exact=True)
+    relabeled = replace(model, lens_decoded=np.where(model.lens_decoded == 0, 20, 10))
+    assert idem_defect(relabeled, "decoded", 1) == idem_defect(model, "decoded", 1)
+    assert retention_error(relabeled, "decoded", 1)[0] == retention_error(model, "decoded", 1)[0]
+    assert route_mismatch(relabeled, "decoded", 1) == route_mismatch(model, "decoded", 1)
+    assert closure_deficit(relabeled, "decoded", 1) == pytest.approx(closure_deficit(model, "decoded", 1))
+
+
+def test_finite_horizon_closure_ignores_zero_mass_fibers():
+    model = rep3_n5_model()
+    # At horizon 0 the law is a point mass. X is determined already, so
+    # I(X;Y_next|Y_now)=0, including when other fibers have undefined conditionals.
+    assert closure_deficit_finite_horizon(model, tau=1, horizon=0) == 0.0
+
+
+def test_exact_stationary_law_is_verified_without_float_rounding():
+    model = rep3_n1_model("minimum_weight", exact=True)
+    identity = np.array([[Fraction(int(i == j)) for j in range(8)] for i in range(8)], dtype=object)
+    assert _stationary_weights(replace(model, P=identity)) == [Fraction(1, 8)] * 8
+    tiny = Fraction(1, 10**30)
+    almost_uniform = identity.copy()
+    almost_uniform[0, 0] -= tiny
+    almost_uniform[0, 1] += tiny
+    with pytest.raises(ValueError, match="not uniform"):
+        _stationary_weights(replace(model, P=almost_uniform))
+
+
+def test_kl_variational_loss_is_infinite_for_missing_support():
+    assert _prediction_loss(np.array([10]), np.array([[1.0, 0.0]]),
+                            np.array([1.0]), np.array([[0.0, 1.0]])) == float("inf")

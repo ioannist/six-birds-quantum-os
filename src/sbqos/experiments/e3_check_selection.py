@@ -124,6 +124,7 @@ def _rep3_ladder(p: Fraction, tol_stop: float) -> dict:
     trace1 = _trace(xi_residual(engine.cov_blocks(L_degree1, D))[0])
     Xi2, _ = xi_residual(engine.cov_blocks(L_degree2, D))
     trace2 = _trace(Xi2)
+    trace2_exact = sum((Xi2[i, i] for i in range(Xi2.shape[0])), Fraction(0))
     mmse = _rep3_exact_mmse(code, p)
 
     candidates = ProbeFamily(
@@ -158,9 +159,10 @@ def _rep3_ladder(p: Fraction, tol_stop: float) -> dict:
         ],
         "exact_mmse": float(mmse),
         "exact_mmse_fraction": f"{mmse.numerator}/{mmse.denominator}",
-        "rung2_minus_mmse": trace2 - float(mmse),
+        "rung2_trace_fraction": str(trace2_exact),
+        "rung2_minus_mmse": float(trace2_exact - mmse),
         "monotone": trace2 <= trace1 + 1e-12,
-        "mmse_equal": abs(trace2 - float(mmse)) <= 1e-10,
+        "mmse_equal": trace2_exact == mmse,
         "selection": {
             "selected_labels": [candidates.labels[i] for i in log.selected_indices],
             "selected_count": len(log.selected_indices),
@@ -186,6 +188,8 @@ def _rep3_exact_mmse(code: Code, p: Fraction) -> Fraction:
     mmse = Fraction(0)
     for entries in groups.values():
         mass = sum((prob for prob, _z in entries), Fraction(0))
+        if mass == 0:
+            continue
         mean = sum((prob * z for prob, z in entries), Fraction(0)) / mass
         for prob, z in entries:
             mmse += prob * (Fraction(z) - mean) ** 2

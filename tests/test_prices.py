@@ -79,3 +79,33 @@ def test_value_curve_exact_rejects_large_candidate_set():
 
     with pytest.raises(ValueError, match="subset cap"):
         value_curve_exact(engine, L0, D, candidates, tuple(1.0 for _ in range(13)), b_max=1)
+
+
+def test_rational_value_curve_and_marginals_are_exact():
+    code = rep_code(3)
+    engine = MomentEngine(n1(Fraction(1, 20), code.n), exact=True)
+    L0 = ProbeFamily("native", (), ())
+    D = ProbeFamily("logical", code.logicals[1:], ("Zbar",))
+    candidates = ProbeFamily("candidate", code.checks, ("h0", "h1"))
+    V = value_curve_exact(engine, L0, D, candidates, (1.0, 1.0), 3)
+    # First discharge: a^2(1-a^2)/(1+a^2), a=9/10. Full residual
+    # is independently enumerated in test_xi/test_e3.
+    assert V == (Fraction(0), Fraction(1539, 18100), Fraction(278559, 2620000), Fraction(278559, 2620000))
+    assert all(isinstance(value, Fraction) for value in V + shadow_prices(V))
+    assert sum(shadow_prices(V), Fraction(0)) == V[-1]
+
+
+def test_exact_budget_does_not_round_an_infeasible_cost_to_one():
+    code = rep_code(3)
+    engine = MomentEngine(n1(Fraction(1, 20), code.n), exact=True)
+    candidates = ProbeFamily("candidate", code.checks[:1], ("h0",))
+    cost = Fraction(1) + Fraction(1, 10**30)
+    V = value_curve_exact(engine, ProbeFamily("native", (), ()),
+                         ProbeFamily("logical", code.logicals[1:], ("Zbar",)), candidates, (cost,), 2)
+    assert V[1] == 0
+    assert V[2] == Fraction(1539, 18100)
+
+
+def test_exact_shadow_prices_do_not_erase_small_marginals():
+    gap = Fraction(1, 10**30)
+    assert shadow_prices((Fraction(1), Fraction(1) + gap)) == (gap,)

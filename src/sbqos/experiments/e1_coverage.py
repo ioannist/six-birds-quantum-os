@@ -288,7 +288,7 @@ def _duplicate_discharge(engine: MomentEngine, L_full: ProbeFamily, D: ProbeFami
     M = ProbeFamily("candidate", (duplicate,), ("h0_dup",))
     ext = engine.extend_blocks(blocks, M)
     matrix, value = discharge(ext, (0,))
-    exact_zero = value == 0.0 and np.all(np.asarray(matrix, dtype=float) == 0.0)
+    exact_zero = all(entry == 0 for entry in matrix.flat)
     if not exact_zero:
         raise AssertionError("duplicate-check discharge was not zero")
     return {"value": float(value), "exact_zero": bool(exact_zero)}

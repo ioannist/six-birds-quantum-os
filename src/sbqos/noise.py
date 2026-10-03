@@ -17,6 +17,10 @@ class Injection:
     prob: Fraction
     vec: PauliVec
 
+    def __post_init__(self) -> None:
+        if not 0 <= self.prob <= 1:
+            raise ValueError("injection probability must lie in [0, 1]")
+
 
 @dataclass(frozen=True)
 class HiddenSpec:
@@ -24,6 +28,16 @@ class HiddenSpec:
     transition_prob: Fraction
     mode_models: tuple["NoiseModel", "NoiseModel"]
     latch_qubit: int | None
+
+    def __post_init__(self) -> None:
+        if self.kind not in {"alternating", "latching"}:
+            raise ValueError("unknown hidden kind")
+        if not 0 <= self.transition_prob <= 1:
+            raise ValueError("hidden transition probability must lie in [0, 1]")
+        if len(self.mode_models) != 2:
+            raise ValueError("hidden dynamics require two mode models")
+        if len(self.mode_models[0].per_qubit) != len(self.mode_models[1].per_qubit):
+            raise ValueError("hidden modes must have the same qubit count")
 
 
 @dataclass(frozen=True)

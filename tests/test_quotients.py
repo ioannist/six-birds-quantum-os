@@ -1,4 +1,5 @@
 from fractions import Fraction
+from dataclasses import replace
 
 import pytest
 
@@ -217,3 +218,46 @@ def _permutation_matrix(targets: tuple[int, ...]):
         tuple(Fraction(1) if j == target else Fraction(0) for j in range(len(targets)))
         for target in targets
     )
+
+
+def test_comparison_map_requires_identity_or_actual_refinement():
+    result = QuotientPair.compute(_two_history_toy_pkg())
+    assert dict(result.comparison_map) == {0: 0, 1: 0}
+    # A one-step erasure kernel makes futures equal but preserves distinct now
+    # signatures. The all-continuations theorem cannot be imported here.
+    pkg = replace(_two_history_toy_pkg(),
+                  now_events=((Fraction(0), Fraction(1)),),
+                  continuations={"identity": ((Fraction(1), Fraction(0)), (Fraction(1), Fraction(0)))})
+    erased = QuotientPair.compute(pkg)
+    assert len(erased.M) == 1 and len(erased.Q) == 2
+    with pytest.raises(ValueError, match="does not refine"):
+        _ = erased.comparison_map
+
+
+@pytest.mark.parametrize("changes", [
+    {"histories": ((Fraction(1, 2), Fraction(0)),)},
+    {"histories": ((Fraction(1),),)},
+    {"now_events": ((Fraction(1),),)},
+    {"later_events": ((Fraction(0), Fraction(2)),)},
+    {"histories": ((1.0, 0.0),)},
+    {"continuations": {"identity": ((Fraction(1), Fraction(1)), (Fraction(0), Fraction(1)))}},
+    {"later_pairs": (("missing", 0),)},
+    {"later_pairs": (("identity", -1),)},
+])
+def test_invalid_probability_packages_cannot_issue_certificates(changes):
+    with pytest.raises(ValueError):
+        replace(_two_history_toy_pkg(), **changes)
+
+
+def test_transport_rejects_a_partition_that_is_not_the_predictive_quotient():
+    pkg = _two_history_toy_pkg()
+    with pytest.raises(ValueError, match="predictive partition"):
+        transport_check(pkg, (frozenset({0, 1}),))
+
+
+def test_internalization_rejects_nonstochastic_phase_data():
+    pkg = _alternating_schedule_naive_pkg()
+    with pytest.raises(ValueError, match="alpha"):
+        internalize_schedule(pkg, (_identity(2), _identity(2)), Fraction(3, 2))
+    with pytest.raises(ValueError, match="phase kernels"):
+        internalize_schedule(pkg, (((Fraction(-1), Fraction(2)), (Fraction(0), Fraction(1))), _identity(2)), Fraction(1, 2))

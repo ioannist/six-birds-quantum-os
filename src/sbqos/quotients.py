@@ -20,6 +20,41 @@ class Package:
     later_events: tuple[tuple[Fraction, ...], ...]
     later_pairs: tuple[tuple[str, int], ...]
 
+    def __post_init__(self) -> None:
+        """Reject invalid probability/effect data before issuing exact audits."""
+        n = len(self.states)
+
+        def rational_row(row, kind):
+            if len(row) != n:
+                raise ValueError(f"{kind} has wrong state dimension")
+            if any(not isinstance(value, (int, Fraction)) for value in row):
+                raise ValueError(f"{kind} must use exact rational entries")
+            values = tuple(Fraction(value) for value in row)
+            if any(value < 0 or value > 1 for value in values):
+                raise ValueError(f"{kind} entries must lie in [0, 1]")
+            return values
+
+        histories = tuple(rational_row(row, "history") for row in self.histories)
+        if any(sum(row, Fraction(0)) != 1 for row in histories):
+            raise ValueError("history must have total mass 1")
+        continuations = {}
+        for name, kernel in self.continuations.items():
+            if len(kernel) != n:
+                raise ValueError("continuation has wrong state dimension")
+            rows = tuple(rational_row(row, "continuation") for row in kernel)
+            if any(sum(row, Fraction(0)) != 1 for row in rows):
+                raise ValueError("continuation rows must have total mass 1")
+            continuations[name] = rows
+        now_events = tuple(rational_row(row, "now event") for row in self.now_events)
+        later_events = tuple(rational_row(row, "later event") for row in self.later_events)
+        for name, event in self.later_pairs:
+            if name not in continuations or not 0 <= event < len(later_events):
+                raise ValueError("later pair references an undeclared continuation or event")
+        object.__setattr__(self, "histories", histories)
+        object.__setattr__(self, "continuations", MappingProxyType(continuations))
+        object.__setattr__(self, "now_events", now_events)
+        object.__setattr__(self, "later_events", later_events)
+
 
 @dataclass(frozen=True)
 class QuotientResult:
@@ -29,6 +64,22 @@ class QuotientResult:
     witnesses: tuple[tuple[int, int], ...]
     max_fiber: int
     delta_max: Fraction
+
+    @property
+    def comparison_map(self) -> Mapping[int, int]:
+        """Canonical M -> Q map, when the declared future tests refine now.
+
+        Finite catalogs need not contain identity/current tests. Their two
+        partitions can cross; pi_map records Q -> incident M classes rather
+        than claiming the imported refinement theorem in that case.
+        """
+        mapping = {}
+        for m_idx, m_group in enumerate(self.M):
+            containing = [q_idx for q_idx, q_group in enumerate(self.Q) if m_group <= q_group]
+            if len(containing) != 1:
+                raise ValueError("predictive catalog does not refine current equivalence")
+            mapping[m_idx] = containing[0]
+        return MappingProxyType(mapping)
 
 
 @dataclass(frozen=True)
@@ -69,6 +120,8 @@ def transport_check(pkg: Package, M: tuple[frozenset[int], ...]) -> TransportMac
     Ref: design/01_MATH_SPEC.md §5.3.
     """
     s_plus = tuple(_s_plus(history, pkg) for history in pkg.histories)
+    if set(M) != set(_partition_by_signature(s_plus)) or len(M) != len(set(M)):
+        raise ValueError("M must be the predictive partition of the declared histories")
     signature_to_m = {}
     for m_idx, group in enumerate(M):
         representative = next(iter(group))
@@ -136,7 +189,15 @@ def internalize_schedule(
         raise ValueError("number of states must divide evenly by number of phases")
 
     alpha = Fraction(alpha)
+    if not 0 <= alpha <= 1:
+        raise ValueError("alpha must lie in [0, 1]")
     n_base = len(pkg.states) // num_phases
+    for phase in phases:
+        if len(phase) != n_base or any(len(row) != n_base for row in phase):
+            raise ValueError("phase kernel has wrong base-state dimension")
+        if any(any(not isinstance(value, (int, Fraction)) or value < 0 for value in row)
+               or sum(row, Fraction(0)) != 1 for row in phase):
+            raise ValueError("phase kernels must be exact stochastic matrices")
     n_joint = len(pkg.states)
     rows = [[Fraction(0) for _ in range(n_joint)] for _ in range(n_joint)]
     for base in range(n_base):

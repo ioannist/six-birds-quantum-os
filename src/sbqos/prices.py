@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from fractions import Fraction
 from itertools import combinations
 
 import numpy as np
@@ -36,34 +37,45 @@ def value_curve_exact(
     L0: ProbeFamily,
     D: ProbeFamily,
     candidates: ProbeFamily,
-    costs: tuple[float, ...],
+    costs: tuple[float | Fraction, ...],
     b_max: int,
-) -> tuple[float, ...]:
-    """Exhaustively enumerate candidate subsets to compute exact V(b)."""
+) -> tuple[Fraction | float, ...]:
+    """Enumerate all subsets; rational moments and costs stay exact.
+
+    With a floating MomentEngine this is exhaustive optimization of approximate
+    values. Float costs denote their exact binary rational values; pass Fraction
+    costs when a decimal or rational budget boundary is intended.
+    """
     if len(candidates.vecs) > 12:
         raise ValueError("exact value-curve subset cap exceeded")
     if len(costs) != len(candidates.vecs):
         raise ValueError("costs must have one entry per candidate")
+    rational_costs = tuple(Fraction(cost) for cost in costs)
+    if any(cost <= 0 for cost in rational_costs):
+        raise ValueError("candidate costs must be positive")
+    if b_max < 0:
+        raise ValueError("b_max must be nonnegative")
 
     Xi0, _ = xi_residual(engine.cov_blocks(L0, D))
-    trace0 = _trace(Xi0)
-    subset_values: list[tuple[float, float]] = []
+    trace0 = _trace_exact(Xi0) if engine.exact else _trace(Xi0)
+    subset_values: list[tuple[Fraction, Fraction | float]] = []
     indices = tuple(range(len(candidates.vecs)))
     for size in range(len(indices) + 1):
         for subset in combinations(indices, size):
-            cost = sum(float(costs[i]) for i in subset)
+            cost = sum((rational_costs[i] for i in subset), Fraction(0))
             L_subset = _with_subset(L0, candidates, subset)
             Xi_subset, _ = xi_residual(engine.cov_blocks(L_subset, D))
-            subset_values.append((cost, trace0 - _trace(Xi_subset)))
+            trace_subset = _trace_exact(Xi_subset) if engine.exact else _trace(Xi_subset)
+            subset_values.append((cost, trace0 - trace_subset))
 
     values = []
     for b in range(b_max + 1):
-        values.append(max((value for cost, value in subset_values if cost <= float(b)), default=0.0))
+        values.append(max(value for cost, value in subset_values if cost <= b))
     return tuple(values)
 
 
-def shadow_prices(V: tuple[float, ...]) -> tuple[float, ...]:
-    return tuple(float(V[b + 1]) - float(V[b]) for b in range(len(V) - 1))
+def shadow_prices(V: tuple[Fraction | float, ...]) -> tuple[Fraction | float, ...]:
+    return tuple(V[b + 1] - V[b] for b in range(len(V) - 1))
 
 
 def slack_point(lam: tuple[float, ...], tol: float) -> int:
@@ -90,3 +102,7 @@ def _with_subset(L0: ProbeFamily, candidates: ProbeFamily, subset: tuple[int, ..
 
 def _trace(M: Matrix) -> float:
     return float(np.trace(np.asarray(M, dtype=float)))
+
+
+def _trace_exact(M: Matrix) -> Fraction:
+    return sum((M[i, i] for i in range(M.shape[0])), Fraction(0))

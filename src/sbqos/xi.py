@@ -43,7 +43,11 @@ class SelectionLog:
 def xi_residual(blocks: CovBlocks) -> tuple[Matrix, Matrix]:
     """Return the adequacy residual Xi(D|L) and optimal linear map A_star.
 
-    The prototype's Ξ is the conditional covariance of logical ±1 observables given scheduled-check ±1 observables (optionally augmented with degree-2 products). Ξ = 0 certifies exact coverage by the linear estimator class over the declared feature family; Ξ ≻ 0 certifies a coverage gap for that class and prices it. It does **not** assert that no nonlinear decoder covers the gap. The degree ladder (E3b) shows the residual contracting as feature degree grows, which is the framework's own account of what nonlinear decoding buys ([XI] chain rule; [CAST] budgeted-randomness curve).
+    Ξ is the covariance of the optimal affine-estimator residual (linear in
+    centered observables). It is generally different from conditional covariance.
+    Ξ = 0 certifies almost-sure affine coverage of D by L under the declared law;
+    Ξ ≠ 0 leaves a gap for this estimator class. A gap does not rule out nonlinear
+    decoding. Complete syndrome-product features span all syndrome functions.
 
     Ref: design/01_MATH_SPEC.md §3.1.
     """
@@ -109,7 +113,7 @@ def chain_rule_check(
     L: ProbeFamily,
     D: ProbeFamily,
     M: ProbeFamily,
-) -> float:
+) -> Fraction | float:
     """Return max absolute chain-rule discrepancy.
 
     Ref: design/01_MATH_SPEC.md §3.3.
@@ -125,10 +129,11 @@ def chain_rule_check(
     )
     Xi_union, _ = xi_residual(engine.cov_blocks(L_union, D))
     predicted = _matrix(Xi_L) - _matrix(D_matrix)
-    diff = _as_float_matrix(Xi_union) - _as_float_matrix(predicted)
+    diff = _matrix(Xi_union) - _matrix(predicted)
     if diff.size == 0:
-        return 0.0
-    return float(np.max(np.abs(diff)))
+        return Fraction(0) if engine.exact else 0.0
+    discrepancy = max(abs(value) for value in diff.flat)
+    return discrepancy if engine.exact else float(discrepancy)
 
 
 def select_checks(
@@ -238,6 +243,8 @@ def _pinv_fraction(M: Matrix) -> Matrix:
     n_rows, n_cols = A.shape
     if n_rows != n_cols:
         raise ValueError("pseudoinverse helper expects a square matrix")
+    if not np.array_equal(A, A.T):
+        raise ValueError("exact covariance pseudoinverse expects a symmetric matrix")
 
     indices = _independent_row_indices(A)
     result = np.empty((n_rows, n_cols), dtype=object)

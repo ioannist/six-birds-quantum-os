@@ -2,6 +2,7 @@ from fractions import Fraction
 from itertools import product
 
 import numpy as np
+import pytest
 
 from sbqos import rng
 from sbqos.codes import rep_code, surface_code, sympl
@@ -62,6 +63,11 @@ def _fraction_matrix(rows):
 
 def _check_penrose_and_numpy_match(K, tol=1e-9):
     G = _pinv(K)
+    # These identities are rational equalities, not float proxy checks.
+    np.testing.assert_array_equal(K @ G @ K, K)
+    np.testing.assert_array_equal(G @ K @ G, G)
+    np.testing.assert_array_equal(K @ G, (K @ G).T)
+    np.testing.assert_array_equal(G @ K, (G @ K).T)
     Kf = np.array([[float(x) for x in row] for row in K])
     Gf = np.array([[float(x) for x in row] for row in G])
     ref = np.linalg.pinv(Kf, rcond=1e-12)
@@ -96,13 +102,38 @@ def test_xi_residual_zero_variance_probe_leaves_residual_unchanged():
         L=L,
         D=D,
         K_LL=np.array([[0.0]]),
-        K_DL=np.array([[0.7]]),
+        # A zero-variance random variable has zero covariance with D.
+        K_DL=np.array([[0.0]]),
         K_DD=np.array([[2.0]]),
     )
 
     Xi, _ = xi_residual(blocks)
 
     np.testing.assert_allclose(Xi, np.array([[2.0]]))
+
+
+def test_chain_rule_check_detects_a_fractional_fault_below_float_resolution(monkeypatch):
+    code = rep_code(3)
+    engine = MomentEngine(n1(Fraction(1, 20), code.n), exact=True)
+    L = ProbeFamily("native", code.checks[:1], ("h0",))
+    M = ProbeFamily("candidate", code.checks[1:], ("h1",))
+    D = ProbeFamily("logical", code.logicals[1:], ("Zbar",))
+    original = engine.cov_blocks
+    fault = Fraction(1, 10**30)
+
+    def faulty_blocks(native, logical):
+        blocks = original(native, logical)
+        if len(native.vecs) == 2:
+            blocks.K_DD[0, 0] += fault
+        return blocks
+
+    monkeypatch.setattr(engine, "cov_blocks", faulty_blocks)
+    assert chain_rule_check(engine, L, D, M) == fault
+
+
+def test_exact_covariance_pseudoinverse_rejects_nonsymmetric_input():
+    with pytest.raises(ValueError, match="symmetric"):
+        _pinv(np.array([[Fraction(1), Fraction(1)], [Fraction(0), Fraction(1)]], dtype=object))
 
 
 def test_blind_spot_witness_toy_diagonal():
