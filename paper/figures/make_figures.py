@@ -392,108 +392,45 @@ _F5_PREDICTORS = (
     "rounding_K8",
     "rounding_K16",
 )
-_F5_LABELS = (
-    "oracle",
-    "exact filter",
-    "run-length K=2",
-    "run-length K=4",
-    "run-length K=8",
-    "run-length K=16",
-    "rounding K=2",
-    "rounding K=4",
-    "rounding K=8",
-    "rounding K=16",
-)
 _F5_POINTS = ("frozen_defaults", "loud_mode")
+_F5_K_GRID = (2, 4, 8, 16)
+_F5_SERIES = (
+    ("run_length", "run-length machine (K states)", GREEN, "-", "o"),
+    ("rounding", "belief rounding (K levels)", VERMILION, "-", "s"),
+)
+_F5_REFERENCES = (
+    ("oracle", "mode oracle (not deployable)", BLACK, ":"),
+    ("exact_filter", "Bayes filter (known model)", BLUE, "--"),
+)
 
 
 def fig_F5(rows: list[dict[str, str]]) -> Figure:
+    """Held-out NLL gain versus machine size K, one panel per operating point."""
+
     rows = _canonical_rows("F5", rows)
-    fig, axes = plt.subplots(1, 2, figsize=(6.5, 3.0), sharey=True)
-    color_by_predictor = {
-        "oracle": BLACK,
-        "exact_filter": BLUE,
-        **{f"run_length_K{k}": GREEN for k in (2, 4, 8, 16)},
-        **{f"rounding_K{k}": VERMILION for k in (2, 4, 8, 16)},
-    }
-    label_by_predictor = dict(zip(_F5_PREDICTORS, _F5_LABELS, strict=True))
-    point_titles = (("frozen_defaults", "(a) frozen defaults"), ("loud_mode", "(b) loud mode"))
+    fig, axes = plt.subplots(1, 2, figsize=(6.5, 3.0))
+    point_titles = (("frozen_defaults", "(a) frozen defaults"), ("loud_mode", "(b) louder operating point"))
+    ks = np.asarray(_F5_K_GRID, dtype=np.int64)
 
     for ax, (point, panel_title) in zip(axes, point_titles, strict=True):
         by_predictor = {row["predictor"]: float(row["gap"]) for row in rows if row["point"] == point}
-        predictors = list(_F5_PREDICTORS)
-        values = [by_predictor[name] for name in predictors]
-        x = np.arange(len(values))
-        bars = ax.bar(
-            x,
-            values,
-            color=[color_by_predictor[name] for name in predictors],
-            edgecolor=BLACK,
-            linewidth=0.4,
-            width=0.72,
-        )
         ax.axhline(0.0, color=BLACK, linewidth=0.8)
-        positions = {name: idx for idx, name in enumerate(predictors)}
-        ax.axvline(
-            (positions["exact_filter"] + positions["run_length_K2"]) / 2,
-            color=BLACK,
-            linestyle=":",
-            linewidth=0.6,
-        )
-        ax.axvline(
-            (positions["run_length_K16"] + positions["rounding_K2"]) / 2,
-            color=BLACK,
-            linestyle=":",
-            linewidth=0.6,
-        )
-        ax.set_xticks(
-            x,
-            [label_by_predictor[name] for name in predictors],
-            rotation=45,
-            ha="right",
-            rotation_mode="anchor",
-        )
-        ax.set_ylim(-0.08, 0.065)
+        for key, label, color, style in _F5_REFERENCES:
+            ax.axhline(by_predictor[key], color=color, linestyle=style, linewidth=1.0, label=label)
+        for family, label, color, style, marker in _F5_SERIES:
+            values = np.asarray([by_predictor[f"{family}_K{k}"] for k in _F5_K_GRID], dtype=np.float64)
+            ax.plot(ks, values, color=color, linestyle=style, marker=marker, label=label)
+        ax.set_xscale("log", base=2)
+        ax.set_xticks(list(_F5_K_GRID), [str(k) for k in _F5_K_GRID])
+        ax.minorticks_off()
+        ax.set_xlim(1.6, 20.0)
+        ax.set_xlabel("machine size K")
         ax.text(0.02, 1.035, panel_title, transform=ax.transAxes, va="bottom", fontsize=8, fontweight="bold")
-        ax.set_xlabel("predictor")
-        if point == "frozen_defaults":
-            for bar, value in zip(bars, values, strict=True):
-                positive = value >= 0
-                ax.annotate(
-                    f"{value:+.2g}",
-                    (bar.get_x() + bar.get_width() / 2, value),
-                    xytext=(0, 2 if positive else -2),
-                    textcoords="offset points",
-                    ha="center",
-                    va="bottom" if positive else "top",
-                    fontsize=7,
-                    rotation=90,
-                )
-        if point == "loud_mode":
-            xpos = positions["rounding_K16"]
-            ax.annotate(
-                "+0.0301",
-                (xpos, by_predictor["rounding_K16"]),
-                xytext=(0, 4),
-                textcoords="offset points",
-                ha="center",
-                va="bottom",
-                fontsize=7,
-            )
 
-    axes[0].set_ylabel("NLL gap vs. static predictor (nats / round)")
-    fig.legend(
-        handles=[
-            Patch(facecolor=BLACK, edgecolor=BLACK, label="oracle"),
-            Patch(facecolor=BLUE, edgecolor=BLACK, label="exact filter"),
-            Patch(facecolor=GREEN, edgecolor=BLACK, label="run-length"),
-            Patch(facecolor=VERMILION, edgecolor=BLACK, label="rounding"),
-        ],
-        loc="upper center",
-        bbox_to_anchor=(0.5, 0.985),
-        ncol=4,
-    )
-    fig.subplots_adjust(left=0.105, right=0.99, bottom=0.37, top=0.77, wspace=0.08)
+    axes[0].set_ylabel("held-out NLL gain over static\n(nats per round)")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.995), ncol=2)
+    fig.subplots_adjust(left=0.13, right=0.99, bottom=0.15, top=0.74, wspace=0.28)
     return fig
 
 
@@ -749,7 +686,7 @@ def fig_F9(rows: list[dict[str, str]]) -> Figure:
     ax.text(
         0.54,
         oracle - 0.0010,
-        "oracle ceiling",
+        "oracle comparator",
         transform=ax.get_yaxis_transform(),
         ha="left",
         va="top",

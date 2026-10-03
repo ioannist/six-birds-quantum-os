@@ -1,0 +1,14 @@
+% ===========================================================================
+\section{Version history}
+\label{app:versions}
+
+\paragraph{Version 1 (5 September 2026).} First public release, \href{https://doi.org/10.5281/zenodo.22337886}{doi:10.5281/zenodo.22337886}.
+
+\paragraph{Version 2 (3 October 2026).} This version follows an audit of the mathematics and executable certificates behind the paper (the repository's \texttt{design/MATHEMATICS\_AUDIT.md}); the corresponding entries are 9--11 of the deviations log (Appendix~\ref{app:deviations}). No registered prediction, frozen bar or verdict changed, and the main results stand as in version 1. The changes are:
+\begin{itemize}[nosep]
+\item The E5 payoff study now fits on the first half of each trajectory and scores every predictor on the same held-out half, with a corrected belief update. The reported gains changed accordingly (Section~\ref{sec:results-memory}; for example, the Bayes filter now recovers about 17\% rather than 18\% of the oracle's gain at the frozen defaults, and the worst small-$K$ rounding score is at $K{=}2$ rather than $K{=}4$). The qualitative findings are unchanged.
+\item E5's predictive quotients now provably refine its current quotients (N5 has 8 predictive classes rather than 5); the operational meaning of $\Delta^{\max}$ is stated as a lower bound of $\Delta^{\max}/2$ on the worst-case error of any predictor that uses only current information; and the minimal machine is described with its exact scope.
+\item Several statements are given their exact scope: the residual as an affine-estimator residual; closure and route mismatch as statements on the support of the weighting law; the E3 ladder result as squared-error estimation; the E4 correlation proxy; the E9 oracle, batch decoding and offline budget matching; and the reason for E9's single-channel drift.
+\item Pricing, greedy selection and the chain-rule discrepancy are computed in rational arithmetic throughout; the test suite has 209 tests; artifacts were regenerated in the environment of Section~\ref{sec:repro}.
+\item The text was rewritten for readability, with a new abstract; Figure~\ref{fig:verdicts} is new and Figure~\ref{fig:payoff} was redrawn.
+\end{itemize}

@@ -1,8 +1,8 @@
 \section{The complete prediction ledger}
 \label{app:predictions}
 
-Every registered prediction, its verdict against its frozen bar, and its artifact. Original build (E1--E6): 25 predictions, 14 \gRegNeg. % F-147, F-148
-Follow-up (E7--E9): 9 scored predictions plus 5 declared-descriptive reports. % F-147
+Every registered prediction, its verdict against its frozen bar, and its artifact. The original build (E1--E6) has 25 predictions, of which 14 are \gRegNeg. % F-147, F-148
+The follow-up (E7--E9) has 9 scored predictions and 5 declared descriptive reports. Figure~\ref{fig:verdicts} shows the same ledger graphically. % F-147
 Artifact paths abbreviate \texttt{artifacts/eN\_*/\dots/results.json} as \texttt{eN}.
 
 \begin{table}[H]
@@ -20,7 +20,7 @@ P2.2 & witness direction names the injected logical direction & \gRegNeg & e2 \\
 P2.3 & null false-positive rate at $N{=}4000$ at most 2\% & \gRegPos & e2 \\ % F-007
 P2.4 & N5 drift-witness trace Spearman $\rho \ge 0.9$ & \gRegNeg & e2 \\ % F-008
 P3.1 & greedy residual no worse than tested baselines at every budget & \gRegPos & e3 \\ % F-009
-P3.2 & degree ladder monotone; top rung equals exact MMSE & \gRegPos & e3 \\ % F-010
+P3.2 & degree ladder monotone; top rung equals the exact (conditional-mean) MMSE & \gRegPos & e3 \\ % F-010
 P3.3 & duplicate candidates have zero marginal value & \gRegPos & e3 \\ % F-011
 P3.4 & greedy stops before exhausting duplicate-containing list & \gRegPos & e3 \\ % F-012
 P4.1 & baseline $CD$ near zero, multiplicity 2, certified, $\delta$ monotone & \gRegNeg & e4 \\ % F-013

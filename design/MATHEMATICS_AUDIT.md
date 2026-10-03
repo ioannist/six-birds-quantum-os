@@ -186,7 +186,7 @@ model. Its qubit-level naming failure is preserved, and overlap with a
 two-dimensional logical direction does not establish unique physical
 localization.
 
-The quadratic statistics are pseudoinverse seminorms; no unconditional power
+The quadratic statistics are squared pseudoinverse seminorms; no unconditional power
 or chi-square-null theorem is claimed. For the frozen code-capacity family,
 positive Pauli probabilities give full syndrome support and distinct Walsh
 features, hence a nonsingular population covariance. For the circuit models,

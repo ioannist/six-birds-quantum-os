@@ -47,6 +47,15 @@ STYLE (arXiv / LaTeX article, 11pt, 1in margins; text width is 6.5in):
 
 ---
 
+## F0 — Every registered prediction and its verdict (summary, TikZ)
+
+- **Placement:** §1, `sec_01_intro.tex`, `\label{fig:verdicts}`; source `figures/fig_F0_verdicts.tex`.
+- **Content:** one row per experiment E1–E9, one cell per registered entry (P1.1 … P9.4), coloured held /
+  failed / predicted-negative-that-held (P7.3) / descriptive. Verdicts must match `predictions[*].verdict`
+  in each `results.json` (facts F-001..F-025, F-079..F-096, F-140). Tallies per row on the right.
+
+---
+
 ## F1 — The SBT-to-QEC instantiation map (conceptual)
 
 > Shipped as TikZ, `paper/figures/fig_F1_map.tex`. The relations on the arrows below are the ones the
@@ -166,55 +175,30 @@ rational arithmetic); do not offset it for visibility.
 
 ---
 
-## F5 — Decoder-memory payoff-v2 NLL ladder (REP(3)+N4, E5)
+## F5 — Decoder-memory payoff: held-out NLL gain versus machine size (REP(3)+N4, E5)
 
 - **Placement:** §5, `sec_05_results_certificates.tex`, `\label{fig:payoff}`.
 - **Filename:** `fig_F5_e5_payoff_ladder.pdf` (full width, 6.5in, two panels side by side).
-- **Source:** `artifacts/e5_default/941e4f34/e5_payoff_v2_ladder.csv`.
+- **Source:** `artifacts/e5_default/941e4f34/e5_payoff_v2_ladder.csv` (v2 artifacts: rounding grid fitted on
+  the training half, every predictor scored on the same held-out half; facts F-034..F-039).
 
 ```
-Specification (implemented in make_figures.py): a two-panel bar chart (panels (a) and (b), shared y-axis).
-
-Panel (a) title-in-corner: "frozen defaults". Panel (b): "loud mode".
-x-axis: ten predictors in this fixed order, tick labels rotated 45 degrees:
-  oracle, exact filter, run-length K=2, K=4, K=8, K=16, rounding K=2, K=4, K=8, K=16.
-Insert a thin vertical dotted divider between "exact filter" and "run-length K=2" and another
-between "run-length K=16" and "rounding K=2". Color groups: oracle black; exact filter blue
-#0072B2; run-length bars green #009E73; rounding bars vermilion #D55E00.
-y-axis: "NLL gap vs. static predictor (nats / round)". The axis MUST include negative values;
-do not clip at zero. Draw a solid black zero line. Use the same y-range on both panels, from
--0.08 to +0.065.
-The "static" row (gap 0.0) is the reference and is represented by the zero line, not a bar.
-
-point,           predictor,      gap
-frozen_defaults, oracle,          0.010610683791784647
-frozen_defaults, exact_filter,    0.0019555946458122975
-frozen_defaults, run_length_K2,   0.00014990331257269673
-frozen_defaults, run_length_K4,   0.00039084583742104995
-frozen_defaults, run_length_K8,   0.0008050817401397126
-frozen_defaults, run_length_K16,  0.0009133989134531562
-frozen_defaults, rounding_K2,    -0.004734536660328081
-frozen_defaults, rounding_K4,    -0.0061612657180165065
-frozen_defaults, rounding_K8,    -0.005285668243491082
-frozen_defaults, rounding_K16,   -0.003747357328565404
-loud_mode,       oracle,          0.058335528953413984
-loud_mode,       exact_filter,    0.03615016176755015
-loud_mode,       run_length_K2,   0.004289397286800778
-loud_mode,       run_length_K4,   0.008848778123807133
-loud_mode,       run_length_K8,   0.010518443617859363
-loud_mode,       run_length_K16,  0.010356102169596149
-loud_mode,       rounding_K2,    -0.0703496611486325
-loud_mode,       rounding_K4,    -0.04440285412943701
-loud_mode,       rounding_K8,    -0.03750137706612855
-loud_mode,       rounding_K16,    0.030134888818091232
-
-The loud-mode rounding K=16 bar is positive (+0.0301) while its siblings are negative. This is
-a real measured value; plot it as-is and add a small 7pt annotation "+0.0301" above it.
-In panel (a) the bars are too small to read on the shared scale: print each bar's value (signed,
-2 significant figures, 7pt, rotated 90°) just beyond the bar's end.
+Specification (implemented in make_figures.py, v2 redesign 2026-10-03): two panels with
+independent y-axes. Panel (a) "frozen defaults", panel (b) "louder operating point".
+x-axis: machine size K on a log2 scale with ticks 2, 4, 8, 16.
+Series: run-length machine (green #009E73, circles, solid) and belief rounding (vermilion
+#D55E00, squares, solid), one point per K, connected only to guide the eye.
+Reference lines across the panel: mode oracle (black, dotted) and Bayes filter (blue #0072B2,
+dashed). Solid black zero line. y-axis label: "held-out NLL gain over static (nats per round)".
+One shared legend above both panels. No hard-coded values: every plotted value comes from the CSV.
+The "static" row (gap 0.0) is the reference and is represented by the zero line.
 ```
 
-- **Caption requirements:** oracle is a ceiling, not deployable; exact filter is the realistic upper bound; run-length machines are positive and generally improve with K (note the slight loud-mode decline from K=8, 0.010518, to K=16, 0.010356: do not write "grows with K" unqualified); rounding machines are mostly negative except the loud-mode K=16 point, which is a real reported result, not an error bar.
+- **Caption requirements:** the oracle is told the hidden mode and is not deployable; all predictors read
+  the full round outcome (including the logical increment) and are scored on the same held-out half;
+  run-length machines are positive at every K (slight loud-mode decline from K=8 to K=16: never write
+  "grows with K" unqualified); rounding is negative except the loud-mode K=16 point (+0.0281), a real
+  measured value; the two panels have different vertical scales.
 
 ---
 
@@ -393,5 +377,5 @@ For full-width figures inside a single-column article this is identical; if the 
 - [ ] Plotted values checked against the CSV (the script prints its arrays).
 - [ ] Fonts are serif and no text is smaller than 7pt at final size.
 - [ ] No title inside the image; caption meets the per-figure requirements and carries its fact ids.
-- [ ] Anomalous values (F5 loud-mode rounding K=16, F8 exact-2x margin, F9 frequent-vs-witness gap) are visible, not trimmed.
+- [ ] Anomalous values (F5 loud-mode rounding K=16 (+0.0281), F8 exact-2x margin, F9 frequent-vs-witness gap) are visible, not trimmed.
 - [ ] File saved as vector PDF under `paper/figures/generated/` and `latexmk` builds clean.

@@ -167,19 +167,28 @@ def test_artist_data_fidelity_and_order():
 
         figure = make_figures.fig_F5(F5_ROWS)
         figures.append(figure)
-        f5_labels = (
-            "oracle", "exact filter", "run-length K=2", "run-length K=4", "run-length K=8",
-            "run-length K=16", "rounding K=2", "rounding K=4", "rounding K=8", "rounding K=16",
-        )
         expected_f5 = (
-            (0.0106, 0.0019, 0.0001, 0.0004, 0.0008, 0.0009, -0.0047, -0.0061, -0.0052, -0.0037),
-            (0.0583, 0.0361, 0.0042, 0.0088, 0.0105, 0.0103, -0.0703, -0.0444, -0.0375, 0.0301),
+            {
+                "run-length machine (K states)": [0.0001, 0.0004, 0.0008, 0.0009],
+                "belief rounding (K levels)": [-0.0047, -0.0061, -0.0052, -0.0037],
+                "mode oracle (not deployable)": [0.0106, 0.0106],
+                "Bayes filter (known model)": [0.0019, 0.0019],
+            },
+            {
+                "run-length machine (K states)": [0.0042, 0.0088, 0.0105, 0.0103],
+                "belief rounding (K levels)": [-0.0703, -0.0444, -0.0375, 0.0301],
+                "mode oracle (not deployable)": [0.0583, 0.0583],
+                "Bayes filter (known model)": [0.0361, 0.0361],
+            },
         )
-        for ax, values in zip(figure.axes, expected_f5, strict=True):
-            mapping = _bar_mapping(ax, ax.patches)
-            assert len(mapping) == 10
-            assert [label for label, _height in mapping] == list(f5_labels)
-            np.testing.assert_array_equal([height for _label, height in mapping], values)
+        assert len(figure.axes) == 2
+        for ax, expected in zip(figure.axes, expected_f5, strict=True):
+            lines = {line.get_label(): line for line in ax.lines if not line.get_label().startswith("_")}
+            assert set(lines) == set(expected)
+            for label in ("run-length machine (K states)", "belief rounding (K levels)"):
+                np.testing.assert_array_equal(lines[label].get_xdata(), [2, 4, 8, 16])
+            for label, values in expected.items():
+                np.testing.assert_array_equal(lines[label].get_ydata(), values)
 
         figure = make_figures.fig_F6(F6_ROWS)
         figures.append(figure)

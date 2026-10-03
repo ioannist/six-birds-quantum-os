@@ -1,5 +1,14 @@
 # SBQOS Prototype Report
 
+> **Status note (2026-10-03).** This report records the build as released with paper version 1
+> (2026-09-05). A later audit of the mathematics and executable certificates
+> (`design/MATHEMATICS_AUDIT.md`; entries dated 2026-10-03 in `design/DEVIATIONS.md`) repaired several
+> computations and regenerated all nine artifact directories in a newer environment. No registered
+> verdict changed. Superseded here: the E5 payoff-v2 numbers and percentages in §2 (rescored on a common
+> held-out window; current values in the E5 `results.json` and the paper, §5.3), N5's predictive class
+> count (now 8), the test counts (now 209), and the manifest hashes in §8 (current values in the table
+> appended to §8). The rest of this report is unchanged.
+
 ## 1. Summary table
 
 Artifact scan note: the experiment artifacts contain 25 registered prediction entries (P1.1-P6.4, including P4.5). Every entry has exactly one grade and a verdict. (A later follow-up investigation added experiments E7-E9 with their own registered predictions, P7.1-P9.4 — see §7.)
@@ -336,6 +345,24 @@ Manifest SHA-256 roots (hash of `manifest.json` itself):
 | `artifacts/e7_default/ab6885e6/manifest.json` | `d2797a3d5651c0f8763478620717fccf5279a6f6023b418944e8089f6678ee37` |
 | `artifacts/e8_default/cf7094d8/manifest.json` | `da2b38f9d11288c6fb258b8f33186b07b9331d223129dd6f5af24c795184b77d` |
 | `artifacts/e9_default/f24323a0/manifest.json` | `32d69ee04e12640c5c9161ea6c4f4cb21453af2c19e65794b35a535402d1fbec` |
+
+### Manifest roots after the 2026-10-03 audit regeneration
+
+Generated with Python 3.12.3, numpy 2.5.2, scipy 1.18.1, stim 1.16.0, pymatching 2.4.0, matplotlib 3.11.1,
+`OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1`; reproduced byte-for-byte by consecutive runs and by a fresh run
+from a clean export of commit `d1a1666`. Test suite: 209 passed.
+
+| manifest path | sha256 |
+|---|---|
+| `artifacts/e1_default/c573063b/manifest.json` | `fb644d12fdef8ce50311014559f3a66219b61006e72f36469008a616c6ecb80b` |
+| `artifacts/e2_default/54f074ca/manifest.json` | `059bca400f361dabb62dce0783ba595de0f53be81c32bac9f581be5167822105` |
+| `artifacts/e3_default/bfb9ffc6/manifest.json` | `4305534d05eed08dad33323cacc33f246b3d8bdf27102aae149962bc20827d2f` |
+| `artifacts/e4_default/09b97eb7/manifest.json` | `194be5b578080f7de618217d2a66826d6f6f79f65fac352ebf635050b22a17f5` |
+| `artifacts/e5_default/941e4f34/manifest.json` | `79df7837357fc4d4ef014044740a4280025b48972724b0a2f158734bf7653c04` |
+| `artifacts/e6_default/7857bdd9/manifest.json` | `0456882431776bc394594c743ae2d316f110ae74923ed5528357969dd5756184` |
+| `artifacts/e7_default/ab6885e6/manifest.json` | `3604c34fd708d4f9920da2c60ff7c4e8901c8a682c88bee7b5a686e5c5ad8a42` |
+| `artifacts/e8_default/cf7094d8/manifest.json` | `6a9933f38caaf23b22386cc6e0e6690f5da8b2749d777a87784f6225bb506820` |
+| `artifacts/e9_default/f24323a0/manifest.json` | `00b9a9b84983fc7a29f2e734430fdba0408f9070d65459ad42590827a87ccf50` |
 
 Acceptance checklist outcomes:
 

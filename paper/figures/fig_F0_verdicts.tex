@@ -1,0 +1,49 @@
+% Figure F0: every registered prediction and its verdict, one row per experiment.
+% Source of truth: predictions[*].verdict in artifacts/eN_default/*/results.json
+% (facts.md F-001..F-025 for E1-E6; F-079..F-096, F-140 for E7-E9).
+\begin{tikzpicture}[
+  x=1in, y=1in, font=\footnotesize,
+  cell/.style={rounded corners=1.5pt, line width=0.5pt, minimum width=0.46in,
+    minimum height=0.22in, inner sep=0pt, font=\scriptsize},
+  held/.style={cell, draw=green!45!black, fill=green!18},
+  failed/.style={cell, draw=red!60!black, fill=red!14},
+  predneg/.style={cell, draw=orange!75!black, fill=orange!22},
+  descr/.style={cell, draw=black!45, dashed, fill=white},
+  rowlabel/.style={anchor=east, align=right, inner sep=0pt},
+  tally/.style={anchor=west, inner sep=0pt, text=black!75}
+]
+\path[use as bounding box] (0,0.28) rectangle (\linewidth,-3.55);
+
+% Column positions: labels end at x=1.55; cells start at x=1.80, pitch 0.53; tallies at x=5.40.
+\newcommand{\vrow}[4]{% #1 y, #2 label, #3 cells, #4 tally
+  \node[rowlabel] at (1.55,#1) {#2};
+  \foreach \kind/\pid [count=\c from 0] in {#3} {
+    \node[\kind] at (1.80+0.53*\c,#1) {\pid};
+  }
+  \node[tally] at (5.40,#1) {#4};
+}
+
+\node[anchor=west, font=\footnotesize\bfseries] at (0.0,0.18) {Original build: 25 registered predictions (E1--E6)};
+\vrow{-0.12}{E1 coverage residual}{failed/P1.1,held/P1.2,failed/P1.3,held/P1.4}{2 held, 2 failed}
+\vrow{-0.42}{E2 drift witness}{failed/P2.1,failed/P2.2,held/P2.3,failed/P2.4}{1 held, 3 failed}
+\vrow{-0.72}{E3 check selection}{held/P3.1,held/P3.2,held/P3.3,held/P3.4}{4 held}
+\vrow{-1.02}{E4 existence certificate}{failed/P4.1,failed/P4.2,failed/P4.3,held/P4.4,held/P4.5}{2 held, 3 failed}
+\vrow{-1.32}{E5 decoder memory}{held/P5.1,failed/P5.2,failed/P5.3,held/P5.4}{2 held, 2 failed}
+\vrow{-1.62}{E6 pricing}{failed/P6.1,failed/P6.2,failed/P6.3,failed/P6.4}{4 failed}
+
+\draw[black!35, line width=0.4pt] (0,-1.86) -- (\linewidth,-1.86);
+\node[anchor=west, font=\footnotesize\bfseries] at (0.0,-2.02) {Follow-up: 9 scored predictions and 5 descriptive reports (E7--E9)};
+\vrow{-2.32}{E7 corrected witness}{failed/P7.1,held/P7.2,predneg/P7.3,descr/P7.4,failed/P7.5,failed/P7.6,descr/P7.7}{2 held, 3 failed}
+\vrow{-2.62}{E8 circuit level}{held/P8.1,held/P8.2,descr/P8.cost}{2 held}
+\vrow{-2.92}{E9 closed loop}{held/P9.1,held/P9.2,descr/P9.3,descr/P9.4}{2 held}
+
+% Legend.
+\node[held, minimum width=0.30in] (k1) at (0.35,-3.38) {};
+\node[anchor=west] at (0.53,-3.38) {held};
+\node[failed, minimum width=0.30in] (k2) at (1.20,-3.38) {};
+\node[anchor=west] at (1.38,-3.38) {failed};
+\node[predneg, minimum width=0.30in] (k3) at (2.10,-3.38) {};
+\node[anchor=west] at (2.28,-3.38) {predicted failure to beat baseline; held};
+\node[descr, minimum width=0.30in] (k4) at (4.75,-3.38) {};
+\node[anchor=west] at (4.93,-3.38) {descriptive, no bar};
+\end{tikzpicture}
