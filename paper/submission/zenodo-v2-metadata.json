@@ -1,0 +1,416 @@
+{
+  "title": "Auditing Emergence in Quantum Error Correction: A Falsifiable Instantiation of Six Birds Theory",
+  "description": "<p>Six Birds Theory (SBT) describes emergence as packaging: a stable macroscopic object arises when microscopic detail is repeatedly coarse-grained and restored to a canonical form. Its central methodological claim is that six primitives (existence certificates, adequacy residuals, predictive quotients, protocol traps, priced budgets, and transport) turn any such packaging structure into concrete computations that can be checked and can fail. This paper tests that claim on quantum error correction, where the packaged object is a logical qubit, in an open, deterministic simulation of small repetition and surface codes. Theorem-level quantities are computed in exact rational arithmetic, and every prediction was registered before its scored run. Of the 25 predictions in the original build, 14 failed; all are reported.</p>\n\n<p>Four primitives nevertheless produced working audit objects. Extended with product features, the adequacy residual attains exactly the minimum mean-squared error with which any estimator can recover the logical observable of the three-qubit repetition code from its syndrome. The existence certificate rejects a decoder that is perfectly stable only because it collapses the logical qubit. Exact memory witnesses separate hidden-state noise from memoryless noise, and a protocol-trap control overturned the study's own registered hypothesis. Every registered prediction about the pricing primitive failed, and transport was not attempted.</p>\n\n<p>The centerpiece is a failed syndrome-only drift detector. It was diagnosed with the framework's own exact machinery, corrected, and re-registered together with a prediction that it would still lose to the baseline on the original test; that prediction held, as did a large predicted win elsewhere. The corrected detector also cleared its registered bar under circuit-level noise, at the narrowest margin the test grid resolves. In a batch-decoded recalibration loop on one channel known to drift, it beat an offline blind schedule matched retrospectively to its number of recalibrations on each seed; whether it beats a schedule with five times its average number of recalibrations is unresolved. The error-correction mechanisms are not new; the contribution is the audit framing, the pre-registration discipline, and a falsification-and-repair loop carried out inside the framework. All code and results are open, and the nine default experiments regenerate byte-identically in the declared environment.</p>\n\n<p>Source repository: <a href=\"https://github.com/ioannist/six-birds-quantum-os\">github.com/ioannist/six-birds-quantum-os</a>.</p>",
+  "publication_date": "2026-10-03",
+  "version": "Preprint version 2",
+  "keywords": [
+    "quantum error correction",
+    "emergence",
+    "emergence calculus",
+    "Six Birds Theory",
+    "adequacy residual",
+    "existence certificate",
+    "pre-registered predictions",
+    "drift detection",
+    "decoder recalibration",
+    "reproducible simulation"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.18365949",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.20124595",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.20713713",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.20713688",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.22335923",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.18906902",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.19187777",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.18926433",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.19002791",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.18926771",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.18608833",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.5281/zenodo.20713577",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.22331/q-2021-07-06-497",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1145/3505637",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.22331/q-2025-01-20-1600",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevA.86.032324",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1038/s41586-022-05434-1",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1038/s41467-021-21982-y",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "arXiv:2311.16214",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.1093/biomet/41.1-2.100",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "arXiv:quant-ph/9705052",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.1016/S0003-4916(02)00018-0",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "arXiv:quant-ph/9811052",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.1063/1.1499754",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevA.90.062320",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.4153/CJM-1965-045-4",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevA.88.062329",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevLett.121.090502",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1038/s41534-018-0106-y",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevA.71.012336",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1038/s41467-020-19074-4",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1038/s41586-024-08449-y",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "arXiv:1405.6267",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "arXiv:1405.5656",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.1088/1367-2630/aa916e",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.22331/q-2019-04-08-131",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevResearch.3.013292",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.22331/q-2022-09-19-809",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevLett.128.110504",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevLett.133.150603",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "arXiv:2504.14643",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "arXiv:2511.09491",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "arXiv:2603.00837",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.1002/qute.201800012",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevResearch.6.043249",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "arXiv:2502.17722",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "arXiv:1405.1454",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "10.1214/aoms/1177732979",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1214/aos/1176344552",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1007/BF01588971",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.48550/arXiv.1102.3975",
+      "relation": "cites",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "arXiv:2105.10386",
+      "relation": "cites",
+      "resource_type": "publication-book"
+    },
+    {
+      "identifier": "10.1198/016214506000001437",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1109/5.18626",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1023/A:1010388907793",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevLett.63.105",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1073/pnas.1314922110",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevE.73.026203",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1063/1.4869075",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1073/pnas.97.7.2968",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.2307/3215235",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevE.108.014304",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1073/pnas.1708274114",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1017/9781107286184",
+      "relation": "cites",
+      "resource_type": "publication-book"
+    },
+    {
+      "identifier": "10.1017/CBO9780511621123",
+      "relation": "cites",
+      "resource_type": "publication-book"
+    },
+    {
+      "identifier": "10.1037/0033-2909.86.3.638",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1126/science.1213847",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1109/5992.881708",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/wg5h-spy6",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PhysRevA.94.032321",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1038/s41534-020-00330-w",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1126/sciadv.aay3050",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1088/2058-9565/adebab",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.22331/q-2024-05-14-1345",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/ps3r-wf84",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.22331/q-2023-08-08-1075",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1103/PRXQuantum.4.040311",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1038/s41586-021-03588-y",
+      "relation": "cites",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.1002/047174882X",
+      "relation": "cites",
+      "resource_type": "publication-book"
+    }
+  ],
+  "notes": "Version 2 (3 October 2026) follows an audit of the mathematics and executable certificates behind the paper (design/MATHEMATICS_AUDIT.md in the source repository). No registered prediction, frozen bar or verdict changed. The E5 memory-payoff study is rescored on a common held-out window; several statements are given their exact mathematical scope; exact computations are rational throughout; the text is rewritten for readability, with a new summary figure. Appendix F of the paper lists the changes. Version 1: doi:10.5281/zenodo.22337886."
+}
