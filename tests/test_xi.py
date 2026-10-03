@@ -7,7 +7,7 @@ import pytest
 from sbqos import rng
 from sbqos.codes import rep_code, surface_code, sympl
 from sbqos.moments import CovBlocks, MomentEngine, ProbeFamily
-from sbqos.noise import n1, n2
+from sbqos.noise import NoiseModel, n1, n2
 from sbqos.xi import (
     _pinv,
     blind_spot_witness,
@@ -134,6 +134,35 @@ def test_chain_rule_check_detects_a_fractional_fault_below_float_resolution(monk
 def test_exact_covariance_pseudoinverse_rejects_nonsymmetric_input():
     with pytest.raises(ValueError, match="symmetric"):
         _pinv(np.array([[Fraction(1), Fraction(1)], [Fraction(0), Fraction(1)]], dtype=object))
+
+
+def test_exact_greedy_ranking_resolves_a_real_signal_below_float_precision():
+    code = rep_code(3)
+    p = Fraction(1, 20)
+    tiny = Fraction(1, 10**30)
+    model = NoiseModel("heterogeneous", tuple(n1(rate, 1).per_qubit[0] for rate in (p, p + tiny, p)), None, None)
+    engine = MomentEngine(model, exact=True)
+    L = ProbeFamily("native", (), ())
+    D = ProbeFamily("logical", code.logicals[1:], ("Zbar",))
+    M = ProbeFamily("candidate", (code.checks[0], code.checks[0] ^ code.checks[1]), ("h01", "h02"))
+    ext = engine.extend_blocks(engine.cov_blocks(L, D), M)
+    first, first_float = discharge(ext, (0,))
+    second, second_float = discharge(ext, (1,))
+    assert first[0, 0] < second[0, 0]
+    assert first_float == second_float
+    assert select_checks(engine, L, D, M, (1.0, 1.0), 1.0, 1e-12).selected_indices == (1,)
+
+
+def test_exact_greedy_budget_does_not_round_intermediate_costs():
+    code = rep_code(3)
+    engine = MomentEngine(n1(Fraction(1, 20), code.n), exact=True)
+    tiny = Fraction(1, 10**30)
+    costs = (Fraction(1, 2) - tiny, Fraction(1, 2) + tiny)
+    result = select_checks(engine, ProbeFamily("native", (), ()),
+                           ProbeFamily("logical", code.logicals[1:], ("Zbar",)),
+                           ProbeFamily("candidate", code.checks, ("h0", "h1")), costs, 1.0, 1e-12)
+    assert result.selected_indices == (0, 1)
+    assert result.rounds[-1].cumulative_cost == 1.0
 
 
 def test_blind_spot_witness_toy_diagonal():

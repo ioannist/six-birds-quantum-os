@@ -66,6 +66,16 @@ class QuotientResult:
     delta_max: Fraction
 
     @property
+    def uniform_prediction_error_lower_bound(self) -> Fraction:
+        """Unavoidable error for one prediction shared by each current class.
+
+        A witness coordinate differs by delta_max. By the triangle inequality,
+        at least one history's error is at least half that separation. The full
+        separation is not a lower bound on the error of a shared prediction.
+        """
+        return self.delta_max / 2
+
+    @property
     def comparison_map(self) -> Mapping[int, int]:
         """Canonical M -> Q map, when the declared future tests refine now.
 

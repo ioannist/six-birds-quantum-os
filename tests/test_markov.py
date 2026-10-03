@@ -18,6 +18,29 @@ from sbqos.moments import MomentEngine, engine_for_mode
 from sbqos.noise import n1, n2, n4
 
 
+def test_signature_states_require_independent_coordinates():
+    code = rep_code(3)
+    with pytest.raises(ValueError, match="independent"):
+        qec_markov_model(code, n1(Fraction(1, 20), code.n),
+                         (code.logicals[1], code.logicals[1]), "minimum_weight", exact=True)
+
+
+def test_logical_coset_coordinates_must_commute_with_checks():
+    code = rep_code(3)
+    nonlogical = np.zeros(2 * code.n, dtype=np.uint8)
+    nonlogical[0] = 1
+    with pytest.raises(ValueError, match="commute"):
+        qec_markov_model(code, n1(Fraction(1, 20), code.n),
+                         (nonlogical,), "minimum_weight", exact=True)
+
+
+def test_signature_vectors_require_the_declared_physical_dimension():
+    code = rep_code(3)
+    with pytest.raises(ValueError, match="dimension"):
+        qec_markov_model(code, n1(Fraction(1, 20), code.n),
+                         (np.zeros(2, dtype=np.uint8),), "minimum_weight", exact=True)
+
+
 def test_rep3_n1_delta_distribution_exact():
     mm = rep3_n1_model("minimum_weight", exact=True)
     expected = (

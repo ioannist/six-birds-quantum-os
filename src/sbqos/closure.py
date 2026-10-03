@@ -440,7 +440,9 @@ def _decoded_expand(model: MarkovModel, labels: tuple[int, ...], exact: bool) ->
     one = _one(exact)
     for row, label in enumerate(labels):
         # Corrected prototypes have zero syndrome and the declared decoded label.
-        # Hidden packages start in mode 0. Labels themselves are not state indices.
+        # Hidden packages declare a mode-0 prototype. This completion resets
+        # the hidden coordinate; it is not a physically implemented leakage
+        # recovery. Labels themselves are not state indices.
         prototype = next(
             (i for i in range(len(model.states))
              if model.lens_syndrome[i] == 0 and model.lens_decoded[i] == label

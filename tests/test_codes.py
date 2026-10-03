@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+from itertools import combinations
 
 from sbqos.codes import canonical_rep, logical_flips, rep_code, surface_code, sympl, syndrome
 from sbqos.linalg2 import rank_f2
@@ -79,3 +80,28 @@ def test_code_meta_is_immutable():
         rep_code(3).meta["x"] = 1
     with pytest.raises(TypeError):
         surface_code(3).meta["x"] = 1
+
+
+@pytest.mark.parametrize("distance", [3, 5])
+def test_surface_distance_is_exact_by_exhaustive_css_support_search(distance):
+    code = surface_code(distance)
+    # For a CSS code an undetected mixed error has undetected X and Z
+    # components. If it is logically nontrivial, one component is nontrivial
+    # and its weight is no larger. Searching pure components therefore proves
+    # the full Pauli distance lower bound, without enumerating mixed labels.
+    def mask(bits):
+        return sum(int(bit) << q for q, bit in enumerate(bits))
+
+    for check_half, logical_half in ((slice(code.n, 2 * code.n), code.logicals[1][code.n:]),
+                                     (slice(0, code.n), code.logicals[0][:code.n])):
+        checks = [mask(check[check_half]) for check in code.checks if np.any(check[check_half])]
+        logical = mask(logical_half)
+        for weight in range(1, distance):
+            for support in combinations(range(code.n), weight):
+                error = sum(1 << q for q in support)
+                if all((check & error).bit_count() % 2 == 0 for check in checks):
+                    assert (logical & error).bit_count() % 2 == 0, (distance, support)
+    # The declared logical operators provide the matching upper bound.
+    for logical in code.logicals:
+        assert np.count_nonzero(logical[:code.n] | logical[code.n:]) == distance
+        assert not np.any(syndrome(code, logical))

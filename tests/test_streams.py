@@ -66,6 +66,22 @@ def test_identity_probe_is_a_constant_observable_in_sampling():
     np.testing.assert_array_equal(blocks.K_DL, np.zeros((1, 1)))
 
 
+def test_syndrome_only_witness_accepts_a_record_without_oracle_observations():
+    code = rep_code(3)
+    L = ProbeFamily("native", code.checks, ("h0", "h1"))
+    D = ProbeFamily("logical", code.logicals[1:], ("Zbar",))
+    model = n1(Fraction(1, 20), code.n)
+    blocks = MomentEngine(model, exact=True).cov_blocks(L, D)
+    _, A_star = xi_residual(blocks)
+    shots = sample_shots(code, model, L, D, 1000, rng(18))
+    empty_D = ProbeFamily("logical", (), ())
+    native_only = ShotTable(L, empty_D, shots.L_outcomes, np.empty((1000, 0)), None)
+    oracle_record = w2_witness(shots, blocks, A_star, np.zeros((1, 1)))
+    native_record = w2_witness(native_only, blocks, A_star, np.zeros((1, 1)))
+    assert native_record.lam_max == oracle_record.lam_max
+    np.testing.assert_array_equal(native_record.z, oracle_record.z)
+
+
 def test_anticommuting_logicals_use_classical_zero_noise_oracle_path(monkeypatch):
     code = rep_code(3)
     L = ProbeFamily("native", code.checks, ("h0", "h1"))

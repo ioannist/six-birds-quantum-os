@@ -32,6 +32,7 @@ class _Machine:
     logical_maps: tuple[dict[int, tuple[Fraction, Fraction]], dict[int, tuple[Fraction, Fraction]]]
     degenerate: bool
     exact_orbit: dict
+    switch: Fraction
 
 
 def _run(config: dict, run: Run) -> None:
@@ -121,8 +122,14 @@ def _hidden_package(model: MarkovModel) -> Package:
     later_events = now_events + (_event_from_int_lens(model.lens_decoded),)
     one_round = _matrix_tuple(model.P)
     two_rounds = _matmul(one_round, one_round)
-    continuations = MappingProxyType({"one_round": one_round, "two_rounds": two_rounds})
-    later_pairs = tuple((gamma, event_idx) for gamma in ("one_round", "two_rounds") for event_idx in range(len(later_events)))
+    identity = tuple(tuple(Fraction(int(i == j)) for j in range(n_states)) for i in range(n_states))
+    continuations = MappingProxyType({"identity": identity, "one_round": one_round, "two_rounds": two_rounds})
+    # Identity/current tests are necessary for M to refine Q. In the latching
+    # package the one- and two-round bit marginals can erase current syndrome
+    # distinctions; omitting identity would turn MaxFiber into an incidence
+    # count rather than a fiber of the canonical comparison map.
+    later_pairs = tuple(("identity", i) for i in range(len(now_events))) + tuple(
+        (gamma, event_idx) for gamma in ("one_round", "two_rounds") for event_idx in range(len(later_events)))
     return Package(
         states=model.states,
         histories=tuple(histories),
@@ -180,6 +187,10 @@ def _trap_packages(p0: Fraction, p1: Fraction, alpha: Fraction) -> dict:
 
 def _quotient_summary(pkg: Package) -> dict:
     result = QuotientPair.compute(pkg)
+    try:
+        comparison_map = {str(k): v for k, v in result.comparison_map.items()}
+    except ValueError:
+        comparison_map = None
     return {
         "Q_count": len(result.Q),
         "M_count": len(result.M),
@@ -188,6 +199,9 @@ def _quotient_summary(pkg: Package) -> dict:
         "max_fiber": result.max_fiber,
         "delta_max": str(result.delta_max),
         "delta_max_float": float(result.delta_max),
+        "uniform_prediction_error_lower_bound": str(result.uniform_prediction_error_lower_bound),
+        "comparison_map": comparison_map,
+        "comparison_map_defined": comparison_map is not None,
         "pi_map": {str(k): list(v) for k, v in result.pi_map.items()},
     }
 
@@ -235,7 +249,7 @@ def _belief_machine(
             if next_beta != beta:
                 degenerate = False
         edges.append(row)
-    orbit = _belief_orbit(likelihoods, switch, switch, depth, cap)
+    orbit = _belief_orbit(likelihoods, switch, Fraction(0), depth, cap)
     return _Machine(
         nodes=nodes,
         edges=tuple(edges),
@@ -248,6 +262,7 @@ def _belief_machine(
         logical_maps=logical_maps,
         degenerate=degenerate,
         exact_orbit=orbit,
+        switch=switch,
     )
 
 
@@ -261,10 +276,9 @@ def _require_frozen_n4_for_belief_machine(p0: Fraction, switch: Fraction) -> Non
 
 
 def _syndrome_likelihood(delta: np.ndarray) -> tuple[Fraction, ...]:
-    # Frozen E5 packaged-belief observation catalog: the four observation
-    # classes are exact subsets of the 3-bit (h0,h1,Zbar) delta signature.
-    groups = ((0, 4), (1, 2), (5, 6), (3, 7))
-    return tuple(sum((delta[i] for i in group), Fraction(0)) for group in groups)
+    # Signature order is (h0,h1,Zbar), with the logical bit least significant.
+    # Marginalize that bit; the sensor supplies only the two syndrome bits.
+    return tuple(sum(delta[2 * syndrome : 2 * syndrome + 2], Fraction(0)) for syndrome in range(4))
 
 
 def _posterior(beta: Fraction, switch: Fraction, likelihoods: list[tuple[Fraction, ...]], observed: int) -> Fraction:
@@ -272,7 +286,7 @@ def _posterior(beta: Fraction, switch: Fraction, likelihoods: list[tuple[Fractio
     numerator = prior * likelihoods[1][observed]
     denominator = numerator + (Fraction(1) - prior) * likelihoods[0][observed]
     if denominator == 0:
-        return Fraction(0)
+        raise ValueError("observation has zero probability under the current belief")
     return numerator / denominator
 
 
@@ -290,6 +304,9 @@ def _belief_orbit(
         nxt = set()
         for belief in current:
             for observed in range(4):
+                prior = belief * (1 - switch) + (1 - belief) * switch
+                if (1 - prior) * likelihoods[0][observed] + prior * likelihoods[1][observed] == 0:
+                    continue
                 nxt.add(_posterior(belief, switch, likelihoods, observed))
                 if len(nxt) > cap:
                     capped = True
@@ -330,11 +347,16 @@ def _payoff_hidden(model: MarkovModel, machine: _Machine, rounds: int, seed: int
     # must not read the hidden mode coordinate, even at initialization.
     beta = 0
     prev_syndrome = int(model.lens_syndrome[trajectory[0]])
-    for state in trajectory:
+    for t, state in enumerate(trajectory):
         syndrome = int(model.lens_syndrome[state])
         syndrome_predictions.append(syndrome_map[syndrome])
-        edge = machine.edges[prev_syndrome * 2 + beta][str(syndrome)]
-        beta = int(edge["to"][1])
+        # P accumulates errors. The fresh round's syndrome is the XOR of
+        # successive cumulative syndromes, not the cumulative syndrome itself.
+        # The first trajectory state is the known initial state, before noise.
+        if t:
+            observed = syndrome ^ prev_syndrome
+            edge = machine.edges[prev_syndrome * 2 + beta][str(observed)]
+            beta = int(edge["to"][1])
         machine_predictions.append(machine_map[(syndrome, beta)])
         prev_syndrome = syndrome
     syn_acc = _accuracy(syndrome_predictions, truth)
@@ -435,14 +457,18 @@ def _payoff_v2_point(
     run_length_Ks: tuple[int, ...],
     rounding_Ks: tuple[int, ...],
 ) -> dict:
+    if rounds < 2:
+        raise ValueError("payoff-v2 needs a training and held-out window")
     d0, d1 = _payoff_v2_deltas(p0)
     mix = 0.5 * d0 + 0.5 * d1  # N4's symmetric mode chain has stationary prior P(mode=1)=1/2.
     outcomes, modes = _payoff_v2_trajectory(d0, d1, switch, rounds, seed)
-    static_nll = float(-np.log(mix[outcomes]).mean())
-    oracle_nll = float(-np.log(np.where(modes[:, None] == 0, d0, d1)[np.arange(rounds), outcomes]).mean())
     exact_filter = _payoff_v2_exact_filter(outcomes, d0, d1, switch)
     split = rounds // 2
-    static_heldout_nll = float(-np.log(mix[outcomes[split:]]).mean())
+    static_full_nll = float(-np.log(mix[outcomes]).mean())
+    static_nll = float(-np.log(mix[outcomes[split:]]).mean())
+    oracle_losses = -np.log(np.where(modes[:, None] == 0, d0, d1)[np.arange(rounds), outcomes])
+    oracle_nll = float(oracle_losses[split:].mean())
+    exact_filter_nll = float(exact_filter["losses"][split:].mean())
     run_length = {
         str(K): {"gap": _payoff_v2_run_length_gap(outcomes, mix, K)}
         for K in run_length_Ks
@@ -453,19 +479,24 @@ def _payoff_v2_point(
     }
     ceiling = _entropy(mix) - 0.5 * _entropy(d0) - 0.5 * _entropy(d1)
     oracle_gap = static_nll - oracle_nll
-    if abs(oracle_gap - ceiling) > 5e-3:
-        raise AssertionError(f"payoff-v2 oracle gap {oracle_gap!r} disagrees with analytic ceiling {ceiling!r}")
     return {
         "label": label,
         "p0": str(p0),
         "s": str(switch),
+        "scoring_window": "heldout_second_half",
+        "training_rounds": split,
+        "scored_rounds": rounds - split,
+        "observations": "full_round_signature_including_logical_increment",
         "static_nll": static_nll,
-        "static_heldout_nll": static_heldout_nll,
+        "static_full_nll": static_full_nll,
+        "static_heldout_nll": static_nll,
         "oracle_nll": oracle_nll,
         "oracle_gap": oracle_gap,
         "ceiling_analytic": ceiling,
-        "exact_filter_nll": exact_filter["nll"],
-        "exact_filter_gap": static_nll - exact_filter["nll"],
+        "oracle_gap_minus_stationary_ceiling": oracle_gap - ceiling,
+        "exact_filter_nll": exact_filter_nll,
+        "exact_filter_full_nll": exact_filter["nll"],
+        "exact_filter_gap": static_nll - exact_filter_nll,
         "run_length": run_length,
         "rounding": rounding,
     }
@@ -490,6 +521,8 @@ def _payoff_v2_trajectory(
     rounds: int,
     seed: int,
 ) -> tuple[np.ndarray, np.ndarray]:
+    if not 0 <= switch <= 1:
+        raise ValueError("switch probability must lie in [0, 1]")
     rng = project_rng(seed)
     mode = 0
     outcomes = np.empty(rounds, dtype=np.int64)
@@ -504,18 +537,21 @@ def _payoff_v2_trajectory(
 
 
 def _payoff_v2_exact_filter(outcomes: np.ndarray, d0: np.ndarray, d1: np.ndarray, switch: Fraction) -> dict:
-    b = 0.5
+    # The trajectory generator starts in mode 0 and transitions before emission.
+    b = 0.0
     s = float(switch)
     nll = 0.0
     beliefs = np.empty(outcomes.shape[0], dtype=np.float64)
+    losses = np.empty(outcomes.shape[0], dtype=np.float64)
     for t, x in enumerate(outcomes):
         bp = b * (1.0 - s) + (1.0 - b) * s
         pred = (1.0 - bp) * d0 + bp * d1
-        nll -= float(np.log(pred[x]))
+        losses[t] = -float(np.log(pred[x]))
+        nll += losses[t]
         denom = bp * d1[x] + (1.0 - bp) * d0[x]
         b = float(bp * d1[x] / denom)
         beliefs[t] = b
-    return {"nll": float(nll / outcomes.shape[0]), "beliefs": beliefs}
+    return {"nll": float(nll / outcomes.shape[0]), "beliefs": beliefs, "losses": losses}
 
 
 def _payoff_v2_run_length_gap(outcomes: np.ndarray, mix: np.ndarray, K: int) -> float:
@@ -545,24 +581,31 @@ def _payoff_v2_rounding_gap(
     beliefs: np.ndarray,
     K: int,
 ) -> dict:
-    eps = np.finfo(float).tiny
-    b_min = float(np.clip(np.min(beliefs), eps, 1.0 - eps))
-    b_max = float(np.clip(np.max(beliefs), eps, 1.0 - eps))
+    split = outcomes.shape[0] // 2
+    if split < 1 or K < 1:
+        raise ValueError("rounding needs training outcomes and at least one prototype")
+    eps = np.finfo(float).eps
+    # Fit the packaging grid only on the training prefix. The scored future
+    # may update the causal filter but must not change the grid's endpoints.
+    b_min = float(np.clip(np.min(beliefs[:split]), eps, 1.0 - eps))
+    b_max = float(np.clip(np.max(beliefs[:split]), eps, 1.0 - eps))
     grid = np.linspace(_logit(b_min), _logit(b_max), K)
     protos = _sigmoid(grid)
-    b = 0.5
+    b = 0.0
     s = float(switch)
     nll = 0.0
-    for x in outcomes:
+    for t, x in enumerate(outcomes):
         bp = b * (1.0 - s) + (1.0 - b) * s
         pred = (1.0 - bp) * d0 + bp * d1
-        nll -= float(np.log(pred[x]))
+        if t >= split:
+            nll -= float(np.log(pred[x]))
         denom = bp * d1[x] + (1.0 - bp) * d0[x]
         post = float(bp * d1[x] / denom)
         b = float(protos[int(np.argmin(np.abs(_logit(protos) - _logit(post))))])
-    rounded_nll = float(nll / outcomes.shape[0])
-    static_nll = float(-np.log(mix[outcomes]).mean())
-    return {"gap": static_nll - rounded_nll, "prototypes": [float(x) for x in protos]}
+    rounded_nll = float(nll / (outcomes.shape[0] - split))
+    static_nll = float(-np.log(mix[outcomes[split:]]).mean())
+    return {"gap": static_nll - rounded_nll, "prototypes": [float(x) for x in protos],
+            "prototype_fit_window": "training_first_half", "scoring_window": "heldout_second_half"}
 
 
 def _entropy(p: np.ndarray) -> float:
@@ -692,10 +735,75 @@ def _predictions(quotients: dict, currentization: dict, machine: _Machine, payof
     ]
 
 
+def _packaged_machine_minimality(machine: _Machine) -> dict:
+    """Minimize the quantized automaton for its next-syndrome predictions.
+
+    Partition refinement produces the largest output-preserving transition
+    congruence. Distinct final classes are distinguishable by some finite word.
+    This certifies the packaged machine, not the unquantized HMM filter.
+    """
+    likelihoods = tuple(tuple(Fraction(value) for value in machine.likelihoods[key])
+                        for key in ("mode0", "mode1"))
+    outputs = []
+    for observed, beta in machine.nodes:
+        prior = machine.switch + (1 - 2 * machine.switch) * beta
+        prediction = tuple((1 - prior) * p0 + prior * p1
+                           for p0, p1 in zip(*likelihoods))
+        outputs.append(prediction)
+    node_to_index = {node: i for i, node in enumerate(machine.nodes)}
+    symbols = tuple(sorted(machine.edges[0]))
+
+    def partition(signatures):
+        unique = {}
+        return tuple(unique.setdefault(signature, len(unique)) for signature in signatures)
+
+    classes = partition(outputs)
+    while True:
+        signatures = []
+        for i, output in enumerate(outputs):
+            targets = tuple(classes[node_to_index[tuple(machine.edges[i][symbol]["to"])]] for symbol in symbols)
+            signatures.append((output, targets))
+        refined = partition(signatures)
+        if refined == classes:
+            break
+        classes = refined
+    groups = [tuple(i for i, label in enumerate(classes) if label == c) for c in range(max(classes) + 1)]
+    edges = []
+    for group in groups:
+        representative = group[0]
+        edges.append({symbol: classes[node_to_index[tuple(machine.edges[representative][symbol]["to"])]]
+                      for symbol in symbols})
+    initial = (0, 0)
+    reachable = {initial}
+    pending = [initial]
+    while pending:
+        node = pending.pop()
+        for edge in machine.edges[node_to_index[node]].values():
+            target = tuple(edge["to"])
+            if target not in reachable:
+                reachable.add(target)
+                pending.append(target)
+    return {
+        "scope": "declared_quantized_machine_next_syndrome_predictions",
+        "readout": "next_syndrome_distribution",
+        "predictive_classes": [[list(machine.nodes[i]) for i in group] for group in groups],
+        "predictive_edges": edges,
+        "outputs": [[str(value) for value in outputs[group[0]]] for group in groups],
+        "minimal_predictive_state_count": len(groups),
+        "immediate_output_lower_bound": len(set(outputs)),
+        "initial_node": list(initial),
+        "reachable_nodes": [list(node) for node in sorted(reachable)],
+        "reachable_predictive_state_count": len({classes[node_to_index[node]] for node in reachable}),
+    }
+
+
 def _machine_summary(machine: _Machine) -> dict:
     return {
+        "semantics": "declared_quantized_belief_automaton",
+        "is_exact_filter_for_original_hmm": False,
         "nodes": [list(node) for node in machine.nodes],
         "edges": list(machine.edges),
+        "minimality": _packaged_machine_minimality(machine),
         "likelihoods": machine.likelihoods,
         "degenerate": machine.degenerate,
         "exact_orbit": machine.exact_orbit,

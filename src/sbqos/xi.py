@@ -141,9 +141,9 @@ def select_checks(
     L0: ProbeFamily,
     D: ProbeFamily,
     candidates: ProbeFamily,
-    costs: tuple[float, ...],
-    budget: float,
-    tol_stop: float,
+    costs: tuple[float | Fraction, ...],
+    budget: float | Fraction,
+    tol_stop: float | Fraction,
 ) -> SelectionLog:
     """Greedily select checks by discharge value per cost.
 
@@ -154,26 +154,35 @@ def select_checks(
     if any(cost <= 0 for cost in costs):
         raise ValueError("candidate costs must be positive")
 
+    exact = engine.exact
+    comparison_costs = tuple(Fraction(cost) if exact else float(cost) for cost in costs)
+    comparison_budget = Fraction(budget) if exact else float(budget)
+    comparison_tol = Fraction(tol_stop) if exact else float(tol_stop)
+
     remaining = list(range(len(candidates.vecs)))
     selected: list[int] = []
     rounds: list[SelectionRound] = []
-    cumulative_cost = 0.0
+    cumulative_cost = Fraction(0) if exact else 0.0
 
     while remaining:
         L_current = _current_family(L0, candidates, selected)
         blocks = engine.cov_blocks(L_current, D)
         ext = engine.extend_blocks(blocks, candidates)
-        rankings: list[tuple[bool, float, float, int, CandidateRanking]] = []
-        remaining_budget = budget - cumulative_cost
+        rankings: list[tuple[bool, float | Fraction, float | Fraction, int, CandidateRanking]] = []
+        remaining_budget = comparison_budget - cumulative_cost
         for i in remaining:
-            _, value = discharge(ext, (i,))
-            value_per_cost = value / costs[i]
-            feasible = costs[i] <= remaining_budget
+            matrix, value = discharge(ext, (i,))
+            # Exact moments must not lose the argmax or budget boundary when
+            # their Fraction values differ below floating-point resolution.
+            if exact:
+                value = sum((matrix[j, j] for j in range(matrix.shape[0])), Fraction(0))
+            value_per_cost = value / comparison_costs[i]
+            feasible = comparison_costs[i] <= remaining_budget
             ranking = CandidateRanking(
                 candidate_label=candidates.labels[i],
-                value=value,
+                value=float(value),
                 cost=float(costs[i]),
-                value_per_cost=value_per_cost,
+                value_per_cost=float(value_per_cost),
                 feasible=feasible,
             )
             rankings.append((feasible, value_per_cost, value, -i, ranking))
@@ -183,27 +192,27 @@ def select_checks(
         selectable = [
             (value_per_cost, value, -neg_i)
             for feasible, value_per_cost, value, neg_i, _ranking in rankings
-            if feasible and value >= tol_stop
+            if feasible and value >= comparison_tol
         ]
         if not selectable:
             rounds.append(
                 SelectionRound(
                     rankings=ordered_rankings,
                     selected_label=None,
-                    cumulative_cost=cumulative_cost,
+                    cumulative_cost=float(cumulative_cost),
                 )
             )
             break
 
         value_per_cost, value, best = selectable[0]
-        cumulative_cost += costs[best]
+        cumulative_cost += comparison_costs[best]
         selected.append(best)
         remaining.remove(best)
         rounds.append(
             SelectionRound(
                 rankings=ordered_rankings,
                 selected_label=candidates.labels[best],
-                cumulative_cost=cumulative_cost,
+                cumulative_cost=float(cumulative_cost),
             )
         )
 

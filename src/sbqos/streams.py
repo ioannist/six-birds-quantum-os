@@ -166,8 +166,9 @@ def w2_witness(shots: ShotTable, model_blocks: CovBlocks, A_star: Matrix, Omega_
 
     Ref: design/01_MATH_SPEC.md §3.5.
     """
-    emp_blocks = empirical_blocks(shots, model_blocks.L, model_blocks.D)
-    Delta_LL = _as_float(emp_blocks.K_LL) - _as_float(model_blocks.K_LL)
+    if not _same_probe_family(shots.L, model_blocks.L):
+        raise ValueError("shot table was sampled with a different L probe family than requested")
+    Delta_LL = _cov_hat(shots.L_outcomes, shots.L_outcomes) - _as_float(model_blocks.K_LL)
     A = _as_float(A_star)
     Delta_D = A @ Delta_LL @ A.T
     return blind_spot_witness(Delta_D, Omega_stat, model_blocks.D.labels)

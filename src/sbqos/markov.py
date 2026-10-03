@@ -9,6 +9,7 @@ import numpy as np
 
 from sbqos.codes import Code, PauliVec, canonical_rep, logical_flips, rep_code, surface_code, sympl
 from sbqos.moments import Matrix, MomentEngine
+from sbqos.linalg2 import rank_f2
 from sbqos.noise import HiddenSpec, NoiseModel, n1, n2, n4, n5
 
 
@@ -34,7 +35,12 @@ def qec_markov_model(
     decoder: str,
     exact: bool,
 ) -> MarkovModel:
-    """Build the QEC Markov model from syndrome/logical-class signatures.
+    """Build the noise kernel on syndrome/logical-class signatures.
+
+    Noise increments accumulate by XOR. Recovery and prototype reinstatement
+    are applied by closure's cycle operator, not between steps of this kernel.
+    Signature coordinates must be independent so every represented state is
+    realizable by a Pauli error. Tracked logicals must commute with checks.
 
     Ref: design/01_MATH_SPEC.md §4.1.
     """
@@ -44,6 +50,16 @@ def qec_markov_model(
     n_syndrome_bits = len(code.checks)
     n_logical_bits = len(tracked_logicals)
     n_signature_bits = n_syndrome_bits + n_logical_bits
+    n_states = (2 if model.hidden is not None else 1) * 2**n_signature_bits
+    if n_states > 20000:
+        raise ValueError("Markov state space exceeds size guard")
+    basis = code.checks + tracked_logicals
+    if any(np.asarray(vec).shape != (2 * code.n,) for vec in basis):
+        raise ValueError("signature Pauli vectors have wrong code dimension")
+    if basis and rank_f2(np.vstack(basis)) != n_signature_bits:
+        raise ValueError("signature coordinates must be independent")
+    if any(sympl(logical, check) for logical in tracked_logicals for check in code.checks):
+        raise ValueError("tracked logicals must commute with stabilizer checks")
     if model.hidden is not None:
         return _hidden_qec_markov_model(
             code,
@@ -60,7 +76,6 @@ def qec_markov_model(
     if n_states > 20000:
         raise ValueError("Markov state space exceeds size guard")
 
-    basis = code.checks + tracked_logicals
     delta = _delta_distribution(code.n, basis, model, exact)
     idx = np.arange(n_states, dtype=np.int64)
     P = delta[idx[:, None] ^ idx[None, :]]

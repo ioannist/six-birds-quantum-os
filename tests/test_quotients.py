@@ -32,6 +32,9 @@ def test_two_history_toy_quotient_result_exact():
     assert result.witnesses == ((0, 1),)
     assert result.max_fiber == 2
     assert result.delta_max == Fraction(1)
+    assert result.uniform_prediction_error_lower_bound == Fraction(1, 2)
+    # The common midpoint predictor has error 1/2 for both histories, so a
+    # claim that the entire separation is unavoidable error would be false.
 
 
 def test_quotient_pair_rejects_unsupported_iface():

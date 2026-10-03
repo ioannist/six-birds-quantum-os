@@ -21,8 +21,71 @@ the refinement premise that a finite future catalog may omit. Constant probes
 are sampled as legal character observables. The residual docstring uses
 affine-estimator residual covariance rather than conditional covariance.
 
-The original design and paper files remain frozen. These repairs and the
-unfinished experiment review are tracked in `MATHEMATICS_AUDIT.md`.
+The original design and paper files remain frozen. The repairs and completed
+mathematical/experiment review are tracked in `MATHEMATICS_AUDIT.md`.
+
+The final exactness pass also found float comparisons in greedy candidate
+selection and intermediate budget accumulation. Exact engines now retain
+rational discharges, costs, and stopping thresholds through these decisions,
+while display logs remain numeric. Precision and rational-budget counterexamples
+test the repair; the frozen E3/E6 order and verdicts are unchanged.
+The Markov builder now validates independent, correctly dimensioned signature
+coordinates and tracked logical commutation, ensuring its represented states
+have physical Pauli preimages. Existing valid models are unchanged. Exhaustive
+CSS searches also verify the declared SURF(3)/SURF(5) distances.
+
+## 2026-10-03 — E5 sensor, prediction scoring, and quotient premises corrected
+
+The belief update grouped the Pauli signature into a different observation
+catalog than the syndrome actually supplied to it. It now marginalizes the
+logical bit into the four physical syndrome probabilities. On the cumulative
+Markov rollout the update reads the XOR of successive syndromes, which is the
+fresh noise increment's syndrome. The known initial state is not processed as
+a noise observation. The default machine remains degenerate and its legacy
+accuracy scores and all four registered E5 verdicts are unchanged.
+
+The post-registration NLL study previously fit belief-rounding grid endpoints
+using the entire scored trajectory. Endpoints now use the training half only;
+all predictors are scored on the same second half. The unrounded Bayesian
+filter starts with the generator's known mode-0 prior. These corrections change
+measured numbers without tuning any model, K grid, or registered bar. Both
+frozen operating points retain positive memory payoff, negative small-K
+rounding, and a positive loud-mode K=16 rounding score. Historical scores are
+retained in the release state; regenerated artifacts explicitly identify the
+new fitting and scoring windows.
+
+N5's future bit marginals can erase some currently distinct histories, so its
+future-only partition did not refine the current partition. Hidden-model
+packages now explicitly include identity continuations with current event
+tests. This restores the premise of the canonical M-to-Q map. N5's predictive
+class count changes from 5 to 8; its four witnesses, MaxFiber 2, and exact gap
+539/1250 are unchanged. The exported unavoidable uniform prediction error
+bound is half the witness separation, as required by the triangle inequality.
+
+The eight-node product automaton is now explicitly labeled as a quantized
+predictor rather than an exact HMM filter. An exact partition-refinement
+certificate minimizes its **next-syndrome prediction** behavior: two states
+across both declared belief prototypes, one reachable predictive state from
+the frozen initial prototype. Its stored last-syndrome coordinate is redundant
+for this readout. The previous entry's universal claim that no finite catalog
+can be transport-closed is incorrect; a singleton stationary distribution is
+already closed. A nontrivial obstruction would require additional premises.
+No such general impossibility claim is needed by the repaired finite machine.
+
+Separately, W2 now computes covariance from the native record directly and
+accepts a record with no oracle logical observations. This removes an
+implementation dependency without changing its statistic or calibration.
+
+## 2026-10-03 — E9 uniform drift rationale is empirical rather than an invariance theorem
+
+The pilot entry's claim that uniform rate rescaling gives every decoding edge
+the same weight, or cannot change relative matching decisions, is too strong.
+For the actual distance-3 memory circuits at rates 0.005 and 0.01, edge-weight
+ratios range from about 0.76418 to 0.89485 at both 5 and 9 rounds. Thus even
+proportional invariance of the weights fails. The pilot's observed very small
+decoder difference supports choosing a larger heterogeneous-channel effect
+for E9; it does not prove that recalibration can never help under uniform
+drift. The implemented E9 scenario and frozen bars remain unchanged.
 
 ---
 
