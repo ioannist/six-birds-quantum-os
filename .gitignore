@@ -15,3 +15,11 @@ artifacts/**
 # local agent tooling and scratch (never published)
 .codex/
 paper/citation-candidates/
+
+# credentials and local tool state (never published)
+.env
+.env.*
+*.pem
+*.key
+.claude/
+paper/submission/receipts/

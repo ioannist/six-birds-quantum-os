@@ -278,9 +278,8 @@ experiments matched the release outputs. E3 adds its rational trace; E6 adds
 rational curve twins and removes intermediate rounding. Floating outputs in
 other fields can differ at final bits from the release environment: the
 thread-count setting is part of this verification's scope. Historical default outputs were copied to
-`.codex/mathematics-audit/release-artifacts/` before regenerating them; this
-ignored local directory is for the release comparison, not a published
-evidence artifact.
+a local, untracked directory before regenerating them; that copy is for the
+release comparison, not a published evidence artifact.
 
 E5 was also regenerated twice at its committed default configuration with
 the same thread settings. All covered files were byte-identical and its
